@@ -82,11 +82,14 @@ $(document).ready(function () {
                 //alter the position of the arrow
                 if (position == 'bottom') $iframe.find('.arrow').hide();
                 // Auroracoin API
-                util.get('http://104.236.66.174:3333/chain/Auroracoin/q/addressbalance/' + address).then(function (response) {
+                //util.get('http://104.236.66.174:3333/chain/Auroracoin/q/address/' + address).then(function (response) {
+               
+                util.get('http://insight.auroracoin.is/api/addr/' + address + '/balance' ).then(function (response) {
                     popUpBalance = response;
 
                 });
-                util.get('http://104.236.66.174:3333/chain/Auroracoin/q/getreceivedbyaddress/' + address).then(function (response) {
+                //util.get('http://104.236.66.174:3333/chain/Auroracoin/q/getreceivedbyaddress/' + address).then(function (response) {
+                util.get('http://insight.auroracoin.is/api/addr/' + address + '/totalReceived' ).then(function (response) {
                     popUpReceived = response;
                 });
 
