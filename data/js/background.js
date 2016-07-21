@@ -30,7 +30,7 @@
     // Open new tabs
     chrome.runtime.onMessage.addListener(function (request) {
         if (request.address) {
-            chrome.tabs.create({url: 'http://104.236.66.174:3333/address/' + request.address});
+            chrome.tabs.create({url: 'http://insight.auroracoin.is/api/address/' + request.address});
         }
     });
 
