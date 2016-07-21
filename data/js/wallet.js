@@ -212,7 +212,7 @@
             if (decryptedPrivateKey) {
                 // Get all unspent outputs from Auroracoin-node to generate our inputs
                 // util.getJSON('http://104.236.66.174:3333/unspent/' + address).then(function (json) {
-                util.getJSON('http://insight.auroracoin.is/api/addr/' + address).then(function (json) {
+                util.getJSON('http://insight.auroracoin.is/api/addr/' + address + '/utxo').then(function (json) {
                     var inputs = json.unspent_outputs,
                         selectedOuts = [],
                         //prepare a key to sign the tx
