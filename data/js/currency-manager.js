@@ -15,15 +15,16 @@
         //in here somewhere need to get bitcoin / Auroracoin value from VPS
         updateExchangeRate: function () {
             //upadate the value of AuroraCoin to bitcoin
-            util.get('http://104.236.66.174:3333/getexchangerate/').then(function (response){
-                    AURExchangeRate = response;
+            //util.get('http://104.236.66.174:3333/getexchangerate/').then(function (response){ AURExchangeRate = response;
+            util.getJSON('https://api.coinmarketcap.com/v1/ticker/auroracoin').then(function (response){ 
+                AURExchangeRate = response['last'];
             });
             return preferences.getCurrency().then(function (currency) {
                     return util.getJSON('https://api.bitcoinaverage.com/ticker/global/' + currency);  
-            }).then(function (response) {
-                return preferences.setExchangeRate(response['last'] * AURExchangeRate);
-            });
-        },
+                    }).then(function (response) {
+                            return preferences.setExchangeRate(response['last'] * AURExchangeRate);
+                            });
+            },
 
         getSymbol: function () {
             return preferences.getCurrency().then(function (currency) {
