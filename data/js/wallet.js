@@ -218,14 +218,15 @@
                         //prepare a key to sign the tx
                         eckey = bitcoin.ECKey.fromWIF(decryptedPrivateKey),
                         // Total cost is amount plus fee
-                        var txValue = Number(amount) + Number(fee),
-                        availableValue = 0;
-                    var inamount = 0 ;
+                       
+                        txValue = Number(amount) + Number(fee),
+                        availableValue = 0,
+                        inAmount = 0 ;
                     // Gather enough inputs so that their value is greater than or equal to the total cost
                     for (var i = 0; i < inputs.length; i++) {
                         selectedOuts.push(inputs[i]);
                         // convert to satoshis
-                        inAmount = inputs[i].amount * 100000000 ;
+                        inAmount = Number( inputs[i].amount * 100000000 ) ;
                         availableValue = availableValue + inAmount;
                         if ((availableValue - txValue) >= 0) break;
                     }
