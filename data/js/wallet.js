@@ -218,15 +218,15 @@
                         //prepare a key to sign the tx
                         eckey = bitcoin.ECKey.fromWIF(decryptedPrivateKey),
                         // Total cost is amount plus fee
-                        txValue = Number(amount) + Number(fee),
+                        var txValue = Number(amount) + Number(fee),
                         availableValue = 0;
-                    var amount = 0 ;
+                    var inamount = 0 ;
                     // Gather enough inputs so that their value is greater than or equal to the total cost
                     for (var i = 0; i < inputs.length; i++) {
                         selectedOuts.push(inputs[i]);
                         // convert to satoshis
-                        amount = inputs[i].amount * 100000000 ;
-                        availableValue = availableValue + inputs[i].amount;
+                        inAmount = inputs[i].amount * 100000000 ;
+                        availableValue = availableValue + inAmount;
                         if ((availableValue - txValue) >= 0) break;
                     }
                     // If there aren't enough unspent outputs to available then we can't send the transaction
@@ -262,7 +262,7 @@
                         //util.get('http://104.236.66.174:3333/pushtx/' + txdata).then(function (response) {
                         //util.get('http://insight.auroracoin.is/api/tx/send/' + txdata).then(function (response) {
                          // Push the transaction to Auroracoin-node
-                        var data = 'rawtx: ' + txdata;
+                        var data = 'rawtx: "' + txdata + '"' ;
                         util.post('http://insight.auroracoin.is/api/tx/send', data).then(function () {
                             
                             success = response;
