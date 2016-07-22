@@ -16,6 +16,7 @@
         updateExchangeRate: function () {
             //upadate the value of AuroraCoin to bitcoin
             //util.get('http://104.236.66.174:3333/getexchangerate/').then(function (response){ AURExchangeRate = response;
+            //BioMike API    util.get('http://www.ercinee.eu/API/AUR/1/index.php?cur=[BTC|ISK|EUR|USD]
             util.getJSON('https://api.coinmarketcap.com/v1/ticker/auroracoin').then(function (response){ 
                 AURExchangeRate = response['last'];
             });
