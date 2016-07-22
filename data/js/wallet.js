@@ -263,8 +263,8 @@
                         //util.get('http://104.236.66.174:3333/pushtx/' + txdata).then(function (response) {
                         //util.get('http://insight.auroracoin.is/api/tx/send/' + txdata).then(function (response) {
                          // Push the transaction to Auroracoin-node
-                        var data = 'rawtx: "' + txdata + '"' ;
-                        util.post('http://insight.auroracoin.is/api/tx/send', data).then(function () {
+                        //var data = 'rawtx: "' + txdata + '"' ;
+                        util.post('http://insight.auroracoin.is/api/tx/send', txdata).then(function () {
                             
                             success = response;
                             preferences.setLastBalance(balance - amount - fee);
