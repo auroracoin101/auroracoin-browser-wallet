@@ -213,17 +213,20 @@
                 // Get all unspent outputs from Auroracoin-node to generate our inputs
                 // util.getJSON('http://104.236.66.174:3333/unspent/' + address).then(function (json) {
                 util.getJSON('http://insight.auroracoin.is/api/addr/' + address + '/utxo').then(function (json) {
-                    var inputs = json.unspent_outputs,
+                    var inputs = json,
                         selectedOuts = [],
                         //prepare a key to sign the tx
                         eckey = bitcoin.ECKey.fromWIF(decryptedPrivateKey),
                         // Total cost is amount plus fee
                         txValue = Number(amount) + Number(fee),
                         availableValue = 0;
+                    var amount = 0 ;
                     // Gather enough inputs so that their value is greater than or equal to the total cost
                     for (var i = 0; i < inputs.length; i++) {
                         selectedOuts.push(inputs[i]);
-                        availableValue = availableValue + inputs[i].value;
+                        // convert to satoshis
+                        amount = inputs[i].amount * 100000000 ;
+                        availableValue = availableValue + inputs[i].amount;
                         if ((availableValue - txValue) >= 0) break;
                     }
                     // If there aren't enough unspent outputs to available then we can't send the transaction
@@ -234,7 +237,10 @@
                         var tx = new bitcoin.Transaction();
                         // Add all our unspent outputs to the transaction as the inputs
                         for (i = 0; i < selectedOuts.length; i++) {
-                            tx.addInput(selectedOuts[i].tx_hash, selectedOuts[i].tx_output_n);
+                            var tx_hash = '', tx_num = 0 ;
+                            tx_hash = selectedOuts[i].txid
+                            tx_num = 0  // need to look this up  -  this not avail selectedOuts[i].tx_output_n
+                            tx.addInput(tx_hash, tx_num );
                         }
                         // Add the send address to the transaction as the output
                         tx.addOutput(sendAddress, amount);
@@ -254,7 +260,11 @@
                         var txdata = tx.toHex();
                         //window.alert(txdata);
                         //util.get('http://104.236.66.174:3333/pushtx/' + txdata).then(function (response) {
-                        util.get('http://insight.auroracoin.is/api/tx/send/' + txdata).then(function (response) {
+                        //util.get('http://insight.auroracoin.is/api/tx/send/' + txdata).then(function (response) {
+                         // Push the transaction to Auroracoin-node
+                        var data = 'rawtx: ' + txdata;
+                        util.post('http://insight.auroracoin.is/api/tx/send', data).then(function () {
+                            
                             success = response;
                             preferences.setLastBalance(balance - amount - fee);
                             if (success == 200) resolve();
