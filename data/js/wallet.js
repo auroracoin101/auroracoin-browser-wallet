@@ -258,7 +258,7 @@
                             tx.sign(i, eckey);
                         }
                         // Push the transaction to Auroracoin-node
-                        var txdata = tx.toHex();
+                        var txdata = 'rawtx=' + tx.toHex();
                         //window.alert(txdata);
                         //util.get('http://104.236.66.174:3333/pushtx/' + txdata).then(function (response) {
                         //util.get('http://insight.auroracoin.is/api/tx/send/' + txdata).then(function (response) {
