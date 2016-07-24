@@ -103,7 +103,8 @@ $(document).ready(function () {
                     if (typeof chrome !== 'undefined') {
                         chrome.runtime.sendMessage({address: address})
                     } else {
-                        self.port.emit('openTab', 'http://104.236.66.174:3333/address/' + address);
+                       // self.port.emit('openTab', 'http://104.236.66.174:3333/address/' + address); http://insight.auroracoin.is/api/addr/
+                       self.port.emit('openTab', 'http://insight.auroracoin.is/api/addr/' + address); 
                     }
                 });
                 $iframe.find('#closeButton').click(function () {
