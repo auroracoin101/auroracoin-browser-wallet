@@ -264,7 +264,7 @@
                         //util.get('http://insight.auroracoin.is/api/tx/send/' + txdata).then(function (response) {
                          // Push the transaction to Auroracoin-node
                         //var data = 'rawtx: "' + txdata + '"' ;
-                        util.post('http://insight.auroracoin.is/api/tx/send', txdata).then(function () {
+                        util.post('http://insight.auroracoin.is/api/tx/send', txdata).then(function (response) {
                             
                             success = response;
                             preferences.setLastBalance(balance - amount - fee);
