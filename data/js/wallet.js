@@ -41,7 +41,7 @@
         generateAddress: function (password) {
             return new Promise(function (resolve, reject) {
                 if (ret.validatePassword(password)) {
-                    //must change this code 
+                    //must change this code
                     var eckey = bitcoin.ECKey.makeRandom()
                     if (isEncrypted) {
                         if (typeof chrome !== 'undefined') {
@@ -86,7 +86,7 @@
             return new Promise(function (resolve, reject) {
                 if (ret.validatePassword(password)) {
                     try {
-                        
+
                         //create an ECKey from private key
                         var eckey = new bitcoin.ECKey.fromWIF(_privateKey);
                         if (isEncrypted) {
@@ -164,10 +164,10 @@
                 balance = result;
                 if (balanceListener) balanceListener(balance);
                 // Check Auroracoin-node for the current balance
-                //util.get('http://104.236.66.174:3333/chain/Auroracoin/q/addressbalance/' + address).then(function (response) {
-                //    balance = response * 100000000; //to match SATOSHIS
-                util.get('http://insight.auroracoin.is/api/addr/' + address + '/balance').then(function (response) {
-                    balance = response ;
+                // util.get('http://104.236.66.174:3333/chain/Auroracoin/q/addressbalance/' + address).then(function (response) {
+                    util.get('https://explorer.auroracoin.eu/chain/AuroraCoin/q/addressbalance/' + address).then(function (response) {
+                    balance = response * 10000 ;  // to match satoshis, in 2 steps seems to help with rounding issues
+                    balance = balance * 10000; //to match SATOSHIS
                     return preferences.setLastBalance(balance);
                 }).then(function () {
                     if (balanceListener) balanceListener(balance);
@@ -211,23 +211,18 @@
             var decryptedPrivateKey = ret.getDecryptedPrivateKey(password);
             if (decryptedPrivateKey) {
                 // Get all unspent outputs from Auroracoin-node to generate our inputs
-                // util.getJSON('http://104.236.66.174:3333/unspent/' + address).then(function (json) {
-                util.getJSON('http://insight.auroracoin.is/api/addr/' + address + '/utxo').then(function (json) {
-                    var inputs = json,
+                util.getJSON('https://explorer.auroracoin.eu/unspent/' + address).then(function (json) {
+                    var inputs = json.unspent_outputs,
                         selectedOuts = [],
                         //prepare a key to sign the tx
                         eckey = bitcoin.ECKey.fromWIF(decryptedPrivateKey),
                         // Total cost is amount plus fee
-                       
                         txValue = Number(amount) + Number(fee),
-                        availableValue = 0,
-                        inAmount = 0 ;
+                        availableValue = 0;
                     // Gather enough inputs so that their value is greater than or equal to the total cost
                     for (var i = 0; i < inputs.length; i++) {
                         selectedOuts.push(inputs[i]);
-                        // convert to satoshis
-                        inAmount = Number( inputs[i].amount * 100000000 ) ;
-                        availableValue = availableValue + inAmount;
+                        availableValue = availableValue + inputs[i].value;
                         if ((availableValue - txValue) >= 0) break;
                     }
                     // If there aren't enough unspent outputs to available then we can't send the transaction
@@ -238,10 +233,7 @@
                         var tx = new bitcoin.Transaction();
                         // Add all our unspent outputs to the transaction as the inputs
                         for (i = 0; i < selectedOuts.length; i++) {
-                            var tx_hash = '', tx_num = 0 ;
-                            tx_hash = selectedOuts[i].txid
-                            tx_num = 0  // need to look this up  -  this not avail selectedOuts[i].tx_output_n
-                            tx.addInput(tx_hash, tx_num );
+                            tx.addInput(selectedOuts[i].tx_hash, selectedOuts[i].tx_output_n);
                         }
                         // Add the send address to the transaction as the output
                         tx.addOutput(sendAddress, amount);
@@ -251,7 +243,7 @@
                         if (changeValue > 0) {
                             //change this to wallet's address
                             tx.addOutput(eckey.pub.getAddress().toString(), changeValue);
-                        }                        
+                        }
                         // Sign all the input hashes
                         for (i = 0; i < tx.ins.length; i++) {
                             //sign each input of the transaction appropriately
@@ -259,17 +251,28 @@
                         }
                         // Push the transaction to Auroracoin-node
                         var txdata = 'rawtx=' + tx.toHex();
-                        //window.alert(txdata);
+
+                      //  window.prompt('rawtx',txdata);
+
                         //util.get('http://104.236.66.174:3333/pushtx/' + txdata).then(function (response) {
-                        //util.get('http://insight.auroracoin.is/api/tx/send/' + txdata).then(function (response) {
-                         // Push the transaction to Auroracoin-node
-                        //var data = 'rawtx: "' + txdata + '"' ;
-                        util.post('http://insight.auroracoin.is/api/tx/send', txdata).then(function (response) {
-                            
-                            success = response;
-                            preferences.setLastBalance(balance - amount - fee);
-                            if (success == 200) resolve();
-                            if (success == 500) reject(Error('Unknown error'));
+                        //util.post('http://insight.auroracoin.is/api/tx/send', txdata).then(function (response) {
+                        util.post('http://insight.auroracoin.is/api/tx/send',txdata).then(function (response) {
+                            var txResponse = [] ;
+                            txResponse = response ;
+                          //  window.alert(txResponse);
+                            var newtxid = txResponse.txid ;
+                            // window.alert('http://insight.auroracoin.is/tx/newtxid');
+                            if (newtxid != '' ) {
+
+                            // success = response;
+                                preferences.setLastBalance(balance - amount - fee);
+                                // if (success == 200)
+                                resolve();
+                                return newtxid ;
+                              } else {
+                                reject(Error('Unknown error'));
+                              }
+                            // if (success == 500)
                             // but don't set the balance since the the wallet will update when it relaods
                         });
                     }
