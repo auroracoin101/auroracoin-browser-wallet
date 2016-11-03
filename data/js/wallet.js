@@ -164,10 +164,8 @@
                 balance = result;
                 if (balanceListener) balanceListener(balance);
                 // Check Auroracoin-node for the current balance
-                // util.get('http://104.236.66.174:3333/chain/Auroracoin/q/addressbalance/' + address).then(function (response) {
-                    util.get('https://explorer.auroracoin.eu/chain/AuroraCoin/q/addressbalance/' + address).then(function (response) {
-                    balance = response * 10000 ;  // to match satoshis, in 2 steps seems to help with rounding issues
-                    balance = balance * 10000; //to match SATOSHIS
+                util.get(preferences.getSite() + '/chain/AuroraCoin/q/addressbalance/' + address).then(function (response) {
+                    balance = response * 100000000; //to match SATOSHIS
                     return preferences.setLastBalance(balance);
                 }).then(function () {
                     if (balanceListener) balanceListener(balance);
@@ -211,7 +209,7 @@
             var decryptedPrivateKey = ret.getDecryptedPrivateKey(password);
             if (decryptedPrivateKey) {
                 // Get all unspent outputs from Auroracoin-node to generate our inputs
-                util.getJSON('https://explorer.auroracoin.eu/unspent/' + address).then(function (json) {
+                util.getJSON(preferences.getSite() + '/unspent/' + address).then(function (json) {
                     var inputs = json.unspent_outputs,
                         selectedOuts = [],
                         //prepare a key to sign the tx
@@ -250,12 +248,21 @@
                             tx.sign(i, eckey);
                         }
                         // Push the transaction to Auroracoin-node
-                        var txdata = 'rawtx=' + tx.toHex();
-
-                      //  window.prompt('rawtx',txdata);
-
-                        //util.get('http://104.236.66.174:3333/pushtx/' + txdata).then(function (response) {
-                        //util.post('http://insight.auroracoin.is/api/tx/send', txdata).then(function (response) {
+                        var txdata = 'rawtx='+tx.toHex();
+                        //window.alert(txdata);
+                        // util.post('insight.auroracoin.is/api/tx/send/' + txdata).then(function (response) {
+                        //     success = response;
+                        //     var txResponse = [] ;
+                        //     txResponse = response ;
+                        //   //  window.alert(txResponse);
+                        //   if (newtxid != '' ) {
+                        //
+                        //     var newtxid = txResponse.txid ;
+                        //     preferences.setLastBalance(balance - amount - fee);
+                        //     if (success == 200) resolve();
+                        //     if (success == 500) reject(Error('Unknown error'));
+                        //     // but don't set the balance since the the wallet will update when it relaods
+                        // });
                         util.post('http://insight.auroracoin.is/api/tx/send',txdata).then(function (response) {
                             var txResponse = [] ;
                             txResponse = response ;
@@ -274,7 +281,7 @@
                               }
                             // if (success == 500)
                             // but don't set the balance since the the wallet will update when it relaods
-                        });
+                        });                        
                     }
                 }, function () {
                     reject(Error('Unknown error'));

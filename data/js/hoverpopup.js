@@ -82,11 +82,11 @@ $(document).ready(function () {
                 //alter the position of the arrow
                 if (position == 'bottom') $iframe.find('.arrow').hide();
                 // Auroracoin API
-                util.get('https://explorer.auroracoin.eu/chain/AuroraCoin/q/addressbalance/' + address).then(function (response) {
+                util.get(preferences.getSite() + '/chain/AuroraCoin/q/addressbalance/' + address).then(function (response) {
                     popUpBalance = response;
 
                 });
-                util.get('https://explorer.auroracoin.eu/chain/AuroraCoin/q/getreceivedbyaddress/' + address).then(function (response) {
+                util.get(preferences.getSite() + '/chain/AuroraCoin/q/getreceivedbyaddress/' + address).then(function (response) {
                     popUpReceived = response;
                 });
 
@@ -100,7 +100,7 @@ $(document).ready(function () {
                     if (typeof chrome !== 'undefined') {
                         chrome.runtime.sendMessage({address: address})
                     } else {
-                        self.port.emit('openTab', 'http://insight.auroracoin.is/address/' + address);
+                        self.port.emit('openTab', preferences.getSite() + '/address/' + address);
                     }
                 });
                 $iframe.find('#closeButton').click(function () {

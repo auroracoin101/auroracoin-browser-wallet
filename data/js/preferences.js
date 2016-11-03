@@ -17,6 +17,7 @@
         EXCHANGE_RATE = 'wallet.exchange_rate',
         BTC_UNITS = 'wallet.btc_units',
         CURRENCY = 'wallet.currency',
+        SITE = 'https://explorer.auroracoin.eu',
         preferences = function() {};
 
     function sync() {
@@ -111,7 +112,12 @@
             return set(CURRENCY, currency).then(function () {
                 currencyManager.updateExchangeRate();
             });
+        },
+
+        getSite: function () {
+            return SITE;
         }
+
     };
 
     window.preferences = new preferences();

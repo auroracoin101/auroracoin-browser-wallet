@@ -1,8 +1,8 @@
 {
-    "manifest_version": 2,
+    "manifest_version": 3,
 
     "name": "BitBrowser Auroracoin Wallet",
-    "author": "Andrew Toth, modifed by Joseph Lee, and Skatefish",
+    "author": "Andrew Toth, modifed by Joseph Lee and SkateFish",
     "description": "Auroracoin wallet in the browser. Send and receive instantly on any web page.",
     "version": "1.3",
 

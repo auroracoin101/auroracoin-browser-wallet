@@ -15,8 +15,10 @@
         //in here somewhere need to get bitcoin / Auroracoin value from VPS
         updateExchangeRate: function () {
             //upadate the value of AuroraCoin to bitcoin
-            util.get('http://www.ercinee.eu/API/AUR/1/index.php?cur=btc').then(function (response){
-                    AURExchangeRate = response;
+            var tickresult
+            util.getJSON('https://bittrex.com/api/v1.1/public/getticker?market=btc-aur').then(function (response){
+                    tickresult = response ;
+                    AURExchangeRate = tickresult.result.Last;
             });
             return preferences.getCurrency().then(function (currency) {
                     return util.getJSON('https://api.bitcoinaverage.com/ticker/global/' + currency);
@@ -73,7 +75,7 @@
                     symbol = values[1][0],
                     beforeOrAfter = values[1][1],
                     SATOSHIS = 100000000,
-                    text = (value / SATOSHIS * rate ).formatMoney(2);
+                    text = (value / SATOSHIS * rate).formatMoney(2);
                 if (beforeOrAfter === 'before') {
                     text = symbol + text;
                 } else {
@@ -100,4 +102,3 @@
     window.currencyManager = ret;
 
 })(window);
-
