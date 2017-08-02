@@ -35,7 +35,7 @@ $(document).ready(function () {
     });
     setupWallet();
 
-    $('#amount').on('keyup change', function () {
+/*    $('#amount').on('keyup change', function () {
         val = Math.floor(Number($(this).val() * BTCMultiplier));
         if (val > 0) {
             currencyManager.formatAmount(val).then(function (formattedMoney) {
@@ -46,6 +46,7 @@ $(document).ready(function () {
             $('#amountLabel').text('Amount:');
         }
     });
+*/
 
     function setBTCUnits(units) {
         BTCUnits = units;
@@ -425,6 +426,24 @@ $(document).ready(function () {
         return false;
     });
 
+    $('#tutorialsModal').on('click', 'a', function () {
+        if (typeof chrome !== 'undefined') {
+            chrome.tabs.create({url: $(this).attr('href')});
+        } else {
+            addon.port.emit('openTab', $(this).attr('href'));
+        }
+        return false;
+    });
+
+    function openTutorial() {
+      if (typeof chrome !== 'undefined') {
+          chrome.tabs.create({url : "http://auroracoin101.is/auroracoin-browser-wallet-tutorial/"});
+      } else {
+          addon.port.emit('openTab', $(this).attr('href'));
+      }
+      return false;
+
+    }
 
     /*
      * Resizing
