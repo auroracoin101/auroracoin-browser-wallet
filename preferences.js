@@ -110,7 +110,7 @@
         getCurrency: get(CURRENCY),
         setCurrency: function (currency) {
             return set(CURRENCY, currency).then(function () {
-                //currencyManager.updateExchangeRate();
+                currencyManager.updateExchangeRate();
             });
         },
 

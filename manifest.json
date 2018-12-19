@@ -1,10 +1,10 @@
 {
-    "manifest_version": 3,
+    "manifest_version": 2,
 
-    "name": "BitBrowser Auroracoin Wallet",
+    "name": "Auroracoin Browser Wallet",
     "author": "Andrew Toth, modifed by Joseph Lee and SkateFish",
     "description": "Auroracoin wallet in the browser. Send and receive instantly on any web page.",
-    "version": "1.3",
+    "version": "2.0.2",
 
     "icons": {
         "16": "data/auroracoin16.png",
@@ -27,8 +27,8 @@
                 "data/js/preferences.js",
                 "data/js/currency-manager.js",
                 "data/js/wallet.js",
-                "data/js/paypopup.js",
-                "data/js/hoverpopup.js"
+                "data/js/paypopup.js"
+                
             ],
             "all_frames": true
         }

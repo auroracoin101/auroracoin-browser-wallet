@@ -164,8 +164,8 @@
                 balance = result;
                 if (balanceListener) balanceListener(balance);
                 // Check Auroracoin-node for the current balance
-                util.get(preferences.getSite() + '/chain/AuroraCoin/q/addressbalance/' + address).then(function (response) {
-                    balance = response * 100000000; //to match SATOSHIS
+                util.get(preferences.getSite() + '/api/addr/' + address + '/balance').then(function (response) {
+                    balance = response ;    //  * 100000000; //to match SATOSHIS
                     return preferences.setLastBalance(balance);
                 }).then(function () {
                     if (balanceListener) balanceListener(balance);
@@ -209,8 +209,8 @@
             var decryptedPrivateKey = ret.getDecryptedPrivateKey(password);
             if (decryptedPrivateKey) {
                 // Get all unspent outputs from Auroracoin-node to generate our inputs
-                util.getJSON(preferences.getSite() + '/unspent/' + address).then(function (json) {
-                    var inputs = json.unspent_outputs,
+                util.getJSON(preferences.getSite() + '/api/addr/' + address + '/utxo').then(function (json) {
+                    var inputs = json,   // .unspent_outputs,
                         selectedOuts = [],
                         //prepare a key to sign the tx
                         eckey = bitcoin.ECKey.fromWIF(decryptedPrivateKey),
@@ -220,7 +220,7 @@
                     // Gather enough inputs so that their value is greater than or equal to the total cost
                     for (var i = 0; i < inputs.length; i++) {
                         selectedOuts.push(inputs[i]);
-                        availableValue = availableValue + inputs[i].value;
+                        availableValue = availableValue + ( inputs[i].amount * 100000000 ) ;   // inputs[i].value;
                         if ((availableValue - txValue) >= 0) break;
                     }
                     // If there aren't enough unspent outputs to available then we can't send the transaction
@@ -231,10 +231,12 @@
                         var tx = new bitcoin.Transaction();
                         // Add all our unspent outputs to the transaction as the inputs
                         for (i = 0; i < selectedOuts.length; i++) {
-                            tx.addInput(selectedOuts[i].tx_hash, selectedOuts[i].tx_output_n);
+                            // var tx_output_n = selectedOuts[i].vout ;
+                            // tx.addInput(selectedOuts[i].tx_hash, tx_output_n );   //  .tx_output_n);
+                            tx.addInput(selectedOuts[i].txid , selectedOuts[i].vout ); //  .tx_output_n);
                         }
                         // Add the send address to the transaction as the output
-                        tx.addOutput(sendAddress, amount);
+                        tx.addOutput(sendAddress, amount );
                         // Add any leftover value to the transaction as an output pointing back to this wallet,
                         // minus the fee of course
                         changeValue = availableValue - txValue;
@@ -263,7 +265,7 @@
                         //     if (success == 500) reject(Error('Unknown error'));
                         //     // but don't set the balance since the the wallet will update when it relaods
                         // });
-                        util.post('http://insight.auroracoin.is/api/tx/send',txdata).then(function (response) {
+                        util.post(preferences.getSite() + '/api/tx/send',txdata).then(function (response) {
                             var txResponse = [] ;
                             txResponse = response ;
                           //  window.alert(txResponse);
@@ -281,7 +283,7 @@
                               }
                             // if (success == 500)
                             // but don't set the balance since the the wallet will update when it relaods
-                        });                        
+                        });
                     }
                 }, function () {
                     reject(Error('Unknown error'));

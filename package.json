@@ -1,12 +1,12 @@
 {
   "name": "auroracoinwallet",
-  "title": "Auroracoin Wallet",
+  "title": "Auroracoin 2.0 Chrome Extension",
   "id": "jid1-sqPdj54n2PcVOQ",
   "description": "Auroracoin wallet in the browser. Send and receive instantly on any web page.",
   "author": "Andrew Toth, modified by Joseph Lee, and Skatefish",
   "license": "MIT",
-  "version": "1.3",
+  "version": "2.0",
   "permissions": {
-      "cross-domain-content": ["http://104.236.66.174", "http://insight.auroracoin.is","https://blockchain.info/", "https://api.bitcoinaverage.com/"]
+      "cross-domain-content": ["http://insight.auroracoin.is","http://auroracoin101.is", "https://api.bitcoinaverage.com/"]
   }
 }

@@ -35,7 +35,7 @@ $(document).ready(function () {
     });
     setupWallet();
 
-/*    $('#amount').on('keyup change', function () {
+    $('#amount').on('keyup change', function () {
         val = Math.floor(Number($(this).val() * BTCMultiplier));
         if (val > 0) {
             currencyManager.formatAmount(val).then(function (formattedMoney) {
@@ -46,7 +46,7 @@ $(document).ready(function () {
             $('#amountLabel').text('Amount:');
         }
     });
-*/
+
 
     function setBTCUnits(units) {
         BTCUnits = units;
