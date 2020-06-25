@@ -4,7 +4,7 @@
     "name": "Auroracoin Browser Wallet",
     "author": "Andrew Toth, modifed by Joseph Lee and SkateFish",
     "description": "Auroracoin wallet in the browser. Send and receive instantly on any web page.",
-    "version": "2.0.2",
+    "version": "2.0.3",
 
     "icons": {
         "16": "data/auroracoin16.png",

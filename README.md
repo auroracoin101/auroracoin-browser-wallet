@@ -7,6 +7,7 @@ Version 1.3   - Updated for Multi-Algo
 Version 2.0   - Updated to use Insight exclusively for blockchain access and tx send
 Version 2.0.1 - Removed incompatible API, exchange rates currently unavailable
 Version 2.0.2 - Fixed API calls, exchange rates and currencies re-enabled
+Version 2.0.3 - Internal Changes related to Github management. 
 
 Security
 --------

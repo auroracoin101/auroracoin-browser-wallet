@@ -10,20 +10,24 @@
  */
 
 (function (window) {
+    var currencyInstance;
     var currencyManager = function () {};
     currencyManager.prototype = {
-        //in here somewhere need to get bitcoin / Auroracoin value from VPS
         updateExchangeRate: function () {
             //upadate the value of AuroraCoin to bitcoin
+            //https://bittrex.com/api/v1.1/public/getticker?market=btc-aur'
+                
             var tickresult
-            util.getJSON('https://bittrex.com/api/v1.1/public/getticker?market=btc-aur').then(function (response){
+            util.getJSON('https://api.coingecko.com/api/v3/simple/price?ids=auroracoin&vs_currencies=btc&include_market_cap=false&include_24hr_vol=false&include_24hr_change=false&include_last_updated_at=false'
+                ).then(function (response){
                     tickresult = response ;
-                    AURExchangeRate = tickresult.result.Last;
+                    AURExchangeRate = tickresult.auroracoin.btc;
+                    //console.log(AURExchangeRate);
             });
             return preferences.getCurrency().then(function (currency) {
-                    return util.getJSON('https://api.bitcoinaverage.com/ticker/global/' + currency);
+                    return util.getJSON('https://apiv2.bitcoinaverage.com/indices/global/ticker/BTC' + currency);
             }).then(function (response) {
-                return preferences.setExchangeRate(response['last'] * AURExchangeRate);
+                return preferences.setExchangeRate(response.last * AURExchangeRate );             
             });
         },
 
@@ -52,7 +56,7 @@
                     case 'NOK':
                     case 'SEK':
                     case 'ISK':
-                        return([' kr', 'after']);
+                        return([' ISK', 'after']);
                     case 'PLN':
                         return(['zł', 'after']);
                     case 'RUB':
