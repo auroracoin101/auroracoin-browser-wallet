@@ -1,4 +1,4 @@
-Auroracoin Wallet Extension 2.0 - Aurora-node API Version
+Auroracoin Wallet Extension 2.0.3 - Aurora-node API Version
 =============
 
 Auroracoin wallet in the browser. Send and receive instantly on any web page.
