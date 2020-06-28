@@ -417,14 +417,14 @@ $(document).ready(function () {
     /*
      * Tutorials
      */
-    $('#tutorialsModal').on('click', 'a', function () {
-        if (typeof chrome !== 'undefined') {
-            chrome.tabs.create({url: $(this).attr('href')});
-        } else {
-            addon.port.emit('openTab', $(this).attr('href'));
-        }
-        return false;
-    });
+    // $('#tutorialsModal').on('click', 'a', function () {
+    //     if (typeof chrome !== 'undefined') {
+    //         chrome.tabs.create({url: $(this).attr('href')});
+    //     } else {
+    //         addon.port.emit('openTab', $(this).attr('href'));
+    //     }
+    //     return false;
+    // });
 
     $('#tutorialsModal').on('click', 'a', function () {
         if (typeof chrome !== 'undefined') {

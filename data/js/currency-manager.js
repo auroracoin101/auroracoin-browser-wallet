@@ -11,26 +11,53 @@
 
 (function (window) {
     var currencyInstance;
-    var currencyManager = function () {};
+
+   var currencyManager = function () {};
     currencyManager.prototype = {
         updateExchangeRate: function () {
-            //upadate the value of AuroraCoin to bitcoin
-            //https://bittrex.com/api/v1.1/public/getticker?market=btc-aur'
-                
-            var tickresult
-            util.getJSON('https://api.coingecko.com/api/v3/simple/price?ids=auroracoin&vs_currencies=btc&include_market_cap=false&include_24hr_vol=false&include_24hr_change=false&include_last_updated_at=false'
-                ).then(function (response){
+            var tickresult 
+            // var lcurr = function () { preferences.getCurrency(); };
+            
+
+            util.getJSON('https://min-api.cryptocompare.com/data/price?fsym=AUR&tsyms=AUD,BRL,CAD,CHF,CNY,ISK,EUR,GBP,ILS,JPY,NOK,NZD,PLN,RUB,SEK,SGD,USD,ZAR'
+                            ).then(function (response){
                     tickresult = response ;
-                    AURExchangeRate = tickresult.auroracoin.btc;
-                    //console.log(AURExchangeRate);
-            });
-            return preferences.getCurrency().then(function (currency) {
-                    return util.getJSON('https://apiv2.bitcoinaverage.com/indices/global/ticker/BTC' + currency);
-            }).then(function (response) {
-                return preferences.setExchangeRate(response.last * AURExchangeRate );             
+                    return preferences.getCurrency().then(function (currency) {
+                        return currency; 
+                    }).then ( function (currency) {
+                                    switch (currency) {
+                    case 'AUD': return ( preferences.setExchangeRate(response.AUD)); 
+                    case 'CAD': return ( preferences.setExchangeRate(response.CAD));
+                    case 'NZD': return ( preferences.setExchangeRate(response.NZD));
+                    case 'SGD': return ( preferences.setExchangeRate(response.SGD));
+                    case 'USD': return ( preferences.setExchangeRate(response.USD));                    case 'AUD': return ( preferences.setExchangeRate(response.AUD)); 
+                    case 'BRL': return ( preferences.setExchangeRate(response.BRL));
+                    case 'CHF': return ( preferences.setExchangeRate(response.CHF));
+                    case 'CNY': return ( preferences.setExchangeRate(response.CNY));
+                    case 'JPY': return ( preferences.setExchangeRate(response.JPY));                    case 'AUD': return ( preferences.setExchangeRate(response.AUD)); 
+                    case 'EUR': return ( preferences.setExchangeRate(response.EUR));
+                    case 'GBP': return ( preferences.setExchangeRate(response.GBP));
+                    case 'ILS': return ( preferences.setExchangeRate(response.ILS));
+                    case 'NOK': return ( preferences.setExchangeRate(response.NOK));
+                    case 'SEK': return ( preferences.setExchangeRate(response.SEK));                    case 'AUD': return ( preferences.setExchangeRate(response.AUD)); 
+                    case 'ISK': return ( preferences.setExchangeRate(response.ISK));
+                    case 'PLN': return ( preferences.setExchangeRate(response.PLN));
+                    case 'RUB': return ( preferences.setExchangeRate(response.RUB));
+                    case 'ZAR': return ( preferences.setExchangeRate(response.ZAR));
+
+                    // case 'RUB':
+                    //     return([' RUB', 'after']);
+                    // case 'ZAR':
+                    //     return([' R', 'after']);
+                    default: return(preferences.setExchangeRate( 0.00 ));
+                    }
+                    } );   
+                    //     preferences.setExchangeRate(response.currency);             
+                    // })
             });
         },
 
+      
         getSymbol: function () {
             return preferences.getCurrency().then(function (currency) {
                 switch (currency) {
@@ -39,32 +66,34 @@
                     case 'NZD':
                     case 'SGD':
                     case 'USD':
-                        return(['$', 'before']);
+                        return(['$ ', 'before']);
                     case 'BRL':
-                        return(['R$', 'before']);
+                        return(['R$ ', 'before']);
                     case 'CHF':
                         return([' Fr.', 'after']);
                     case 'CNY':
                     case 'JPY':
-                        return(['¥', 'before']);
+                        return(['¥ ', 'before']);
                     case 'EUR':
-                        return(['€', 'before']);
+                        return(['€ ', 'before']);
                     case 'GBP':
-                        return(['£', 'before']);
+                        return(['£ ', 'before']);
                     case 'ILS':
-                        return(['₪', 'before']);
+                        return(['₪ ', 'before']);
                     case 'NOK':
+                        return([' kr', 'after']);
                     case 'SEK':
+                        return([' kr', 'after']);
                     case 'ISK':
                         return([' ISK', 'after']);
                     case 'PLN':
-                        return(['zł', 'after']);
+                        return([' zł', 'after']);
                     case 'RUB':
                         return([' RUB', 'after']);
                     case 'ZAR':
                         return([' R', 'after']);
                     default:
-                        return(['$', 'before']);
+                        return(['$ ', 'before']);
                 }
             });
         },
@@ -92,7 +121,7 @@
 
     Number.prototype.formatMoney = function(c, d, t){
         var n = this,
-            c = isNaN(c = Math.abs(c)) ? 2 : c,
+            c = isNaN(c = Math.abs(c)) ? 3 : c,
             d = d == undefined ? "." : d,
             t = t == undefined ? "," : t,
             s = n < 0 ? "-" : "",
