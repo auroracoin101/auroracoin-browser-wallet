@@ -22,9 +22,7 @@
             util.getJSON('https://min-api.cryptocompare.com/data/price?fsym=AUR&tsyms=AUD,BRL,CAD,CHF,CNY,ISK,EUR,GBP,ILS,JPY,NOK,NZD,PLN,RUB,SEK,SGD,USD,ZAR'
                             ).then(function (response){
                     tickresult = response ;
-                    return preferences.getCurrency().then(function (currency) {
-                        return currency; 
-                    }).then ( function (currency) {
+                    return preferences.getCurrency().then ( function (currency) {
                                     switch (currency) {
                     case 'AUD': return ( preferences.setExchangeRate(response.AUD)); 
                     case 'CAD': return ( preferences.setExchangeRate(response.CAD));

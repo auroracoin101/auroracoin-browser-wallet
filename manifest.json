@@ -14,8 +14,8 @@
 
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self';",
 
-   // "permissions": ["contextMenus", "activeTab", "<all_urls>", "storage"],
-    "permissions": [ "activeTab","storage"],
+    "permissions": ["contextMenus", "activeTab", "<all_urls>", "storage"],
+    //"permissions": [ "activeTab","storage"],
 
     "content_scripts": [
         {
@@ -35,9 +35,9 @@
         }
     ],
 
-    // "background": {
-    //     "scripts": ["data/js/background.js"]
-    // },
+     "background": {
+         "scripts": ["data/js/background.js"]
+     },
 
     "web_accessible_resources": [
         "data/*"

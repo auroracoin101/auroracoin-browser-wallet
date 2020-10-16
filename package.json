@@ -7,7 +7,6 @@
   "license": "MIT",
   "version": "2.0.5",
   "permissions": {
-      "cross-domain-content": ["http://insight.auroracoin.is","http://auroracoin101.is" ]
-  //, "https://api.bitcoinaverage.com/"]
+      "cross-domain-content": ["http://insight.auroracoin.is","http://auroracoin101.is","https://min-api.cryptocompare.com" ]
   }
 }
