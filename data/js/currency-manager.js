@@ -28,25 +28,21 @@
                     case 'CAD': return ( preferences.setExchangeRate(response.CAD));
                     case 'NZD': return ( preferences.setExchangeRate(response.NZD));
                     case 'SGD': return ( preferences.setExchangeRate(response.SGD));
-                    case 'USD': return ( preferences.setExchangeRate(response.USD));                    case 'AUD': return ( preferences.setExchangeRate(response.AUD)); 
+                    case 'USD': return ( preferences.setExchangeRate(response.USD));
                     case 'BRL': return ( preferences.setExchangeRate(response.BRL));
                     case 'CHF': return ( preferences.setExchangeRate(response.CHF));
                     case 'CNY': return ( preferences.setExchangeRate(response.CNY));
-                    case 'JPY': return ( preferences.setExchangeRate(response.JPY));                    case 'AUD': return ( preferences.setExchangeRate(response.AUD)); 
+                    case 'JPY': return ( preferences.setExchangeRate(response.JPY));                    
                     case 'EUR': return ( preferences.setExchangeRate(response.EUR));
                     case 'GBP': return ( preferences.setExchangeRate(response.GBP));
                     case 'ILS': return ( preferences.setExchangeRate(response.ILS));
                     case 'NOK': return ( preferences.setExchangeRate(response.NOK));
-                    case 'SEK': return ( preferences.setExchangeRate(response.SEK));                    case 'AUD': return ( preferences.setExchangeRate(response.AUD)); 
+                    case 'SEK': return ( preferences.setExchangeRate(response.SEK));                    
                     case 'ISK': return ( preferences.setExchangeRate(response.ISK));
                     case 'PLN': return ( preferences.setExchangeRate(response.PLN));
                     case 'RUB': return ( preferences.setExchangeRate(response.RUB));
                     case 'ZAR': return ( preferences.setExchangeRate(response.ZAR));
 
-                    // case 'RUB':
-                    //     return([' RUB', 'after']);
-                    // case 'ZAR':
-                    //     return([' R', 'after']);
                     default: return(preferences.setExchangeRate( 0.00 ));
                     }
                     } );   
