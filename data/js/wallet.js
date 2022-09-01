@@ -215,59 +215,73 @@
                         //prepare a key to sign the tx
                         eckey = bitcoin.ECKey.fromWIF(decryptedPrivateKey),
                         // Total cost is amount plus fee
-                        txValue = Number(amount) + Number(fee),
-                        availableValue = 0;
+                        txValue =  Number(amount) + Number(fee),
+						availableValue = 0,
+                        inputAmount = Number(0.0) ;
+						// inputAmount = Number(0.00) ;
                     // Gather enough inputs so that their value is greater than or equal to the total cost
                     for (var i = 0; i < inputs.length; i++) {
                         selectedOuts.push(inputs[i]);
-                        availableValue = availableValue + ( inputs[i].amount * 100000000 ) ;   // inputs[i].value;
+                        inputAmount = parseInt((inputs[i].amount * 100000000).toFixed(0), 10); 
+											
+						console.log('inputAmount ' + inputAmount.toString());
+                        availableValue = availableValue + inputAmount ;   // inputs[i].value;
+						console.log('availableValue ' + availableValue.toString());
                         if ((availableValue - txValue) >= 0) break;
                     }
+
+					
                     // If there aren't enough unspent outputs to available then we can't send the transaction
                     if ((availableValue - txValue) < 0) {
                         reject(Error('Insufficient funds'));
                     } else {
                         // Create the transaction
-                        var tx = new bitcoin.Transaction();
+                        var txb = new bitcoin.TransactionBuilder();
                         // Add all our unspent outputs to the transaction as the inputs
                         for (i = 0; i < selectedOuts.length; i++) {
                             // var tx_output_n = selectedOuts[i].vout ;
                             // tx.addInput(selectedOuts[i].tx_hash, tx_output_n );   //  .tx_output_n);
-                            tx.addInput(selectedOuts[i].txid , selectedOuts[i].vout ); //  .tx_output_n);
+                            txb.addInput(selectedOuts[i].txid , selectedOuts[i].vout ); //  .tx_output_n);
                         }
                         // Add the send address to the transaction as the output
-                        tx.addOutput(sendAddress, amount );
+                        txb.addOutput(sendAddress, amount );
                         // Add any leftover value to the transaction as an output pointing back to this wallet,
                         // minus the fee of course
                         changeValue = availableValue - txValue;
                         if (changeValue > 0) {
                             //change this to wallet's address
-                            tx.addOutput(eckey.pub.getAddress().toString(), changeValue);
+                            txb.addOutput(eckey.pub.getAddress().toString(), changeValue);
                         }
+						
+                        // const data = Buffer.from('YOUR OP_RETURN DATA HERE', 'utf8');
+                        // const dataScript = bitcoinjs.script.nullData.output.encode(data);
+						
+                        // txb.addOutput(recipient, Math.floor(1.88*1e8)); // payee
+
+                        // encode some text as a buffer
+                        // const opdata = [0x61,0x75,0x72,0x6f,0x72,0x61,0x63,0x6f,0x69,0x6e,0x31,0x30,0x31);
+						// const opdata = [97,117,114,111,114,97,99,111,105,110,49,48,49];
+						// var opdata = new Uint8Array([97,117,114,111,114,97,99,111,105,110,49,48,49]);
+						
+						//var opdata = new bitcoin.Buffer('Auroracoin101','utf8');
+						//var dataScript = bitcoin.scripts.nullDataOutput(opdata);
+						//txb.addOutput(dataScript, 0)
+
+
                         // Sign all the input hashes
-                        for (i = 0; i < tx.ins.length; i++) {
+                        for (i = 0; i < txb.tx.ins.length; i++) {
                             //sign each input of the transaction appropriately
-                            tx.sign(i, eckey);
+                            txb.sign(i, eckey);
                         }
                         // Push the transaction to Auroracoin-node
-                        var txdata = 'rawtx='+tx.toHex();
-                        //window.alert(txdata);
-                        // util.post('insight.auroracoin.is/api/tx/send/' + txdata).then(function (response) {
-                        //     success = response;
-                        //     var txResponse = [] ;
-                        //     txResponse = response ;
-                        //   //  window.alert(txResponse);
-                        //   if (newtxid != '' ) {
-                        //
-                        //     var newtxid = txResponse.txid ;
-                        //     preferences.setLastBalance(balance - amount - fee);
-                        //     if (success == 200) resolve();
-                        //     if (success == 500) reject(Error('Unknown error'));
-                        //     // but don't set the balance since the the wallet will update when it relaods
-                        // });
-                        util.post(preferences.getSite() + '/api/tx/send',txdata).then(function (response) {
-                            var txResponse = [] ;
-                            txResponse = response ;
+                        var txdata = 'rawtx='+txb.build().toHex();
+                        console.log(txdata);
+
+
+                        util.post(preferences.getSite() + '/api/tx/send',txdata).then(function (result) {
+                            let txResponse = JSON.parse(result);
+
+                           // txResponse = result ;
                           //  window.alert(txResponse);
                             var newtxid = txResponse.txid ;
                             // window.alert('http://insight.auroracoin.is/tx/newtxid');
@@ -283,7 +297,17 @@
                               }
                             // if (success == 500)
                             // but don't set the balance since the the wallet will update when it relaods
-                        });
+                         /* always put errorHandler in the last 'then' with a 'null' logic handler, 
+                              so that all errors will be caught 
+                              someModule.promiseFunc()
+                                    .then(function (data) { //TODO other logic  })
+                                    .then(null, errorHandler);
+                                */
+                        } , function (error) {
+                            console.log('Error: ',error);
+                            alert(error);
+                            reject(Error(error));
+                        })
                     }
                 }, function () {
                     reject(Error('Unknown error'));

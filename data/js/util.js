@@ -20,7 +20,8 @@
                     if (req.status == 200) {
                         resolve(req.response);
                     } else {
-                        reject(Error(req.statusText));
+						console.log(req.response);
+                        reject(Error(req.response));
                     }
                 }
                 req.onerror = function () {

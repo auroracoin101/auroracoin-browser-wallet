@@ -26,4 +26,3 @@ This is managed by the Browser Software.
 
 Encrypting the private key ensures that nobody will know the private key without the password, not even this extension.
 
- 

@@ -13,7 +13,7 @@ $(document).ready(function () {
     var val = '',
         address = '',
         SATOSHIS = 100000000,
-        FEE = SATOSHIS * .0001,
+        FEE = SATOSHIS * .1,
         BTCUnits = 'AUR',
         BTCMultiplier = SATOSHIS;
     function setupWallet() {
@@ -36,7 +36,9 @@ $(document).ready(function () {
     setupWallet();
 
     $('#amount').on('keyup change', function () {
-        val = Math.floor(Number($(this).val() * BTCMultiplier));
+        val = Math.round(Number($(this).val() * BTCMultiplier));
+		// val = Number($(this).val()) * 1e8 ;
+		// val = Math.floor( val ) ;
         if (val > 0) {
             currencyManager.formatAmount(val).then(function (formattedMoney) {
                 var text = 'Amount: ' + formattedMoney;
@@ -88,10 +90,12 @@ $(document).ready(function () {
     }
 
     /*
-     *  Send BTC
+     *  Send AUR
      */
     $('#sendButton').click(function () {
-        val = Math.floor(Number($('#amount').val() * BTCMultiplier));
+        // val = Math.floor(Number($('#amount').val() * BTCMultiplier));
+		val = Math.round(Number($('#amount').val() * BTCMultiplier));
+		// val = Math.floor(Number($('#amount').val() * 1e8));
         address = $('#sendAddress').val();
         var balance = wallet.getBalance();
         var validAmount = true;
