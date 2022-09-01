@@ -1,12 +1,13 @@
 {
   "name": "auroracoinwallet",
-  "title": "Auroracoin 2.0.5 Chromium Browser Extension",
+  "title": "Auroracoin 2.0.7 Chromium Browser Extension",
   "id": "jid1-sqPdj54n2PcVOQ",
   "description": "Auroracoin wallet in the browser. Send and receive instantly on any web page.",
   "author": "Andrew Toth, modified by Joseph Lee, and Skatefish",
   "license": "MIT",
-  "version": "2.0.5",
+  "version": "2.0.7",
   "permissions": {
-      "cross-domain-content": ["http://insight.auroracoin.is","http://auroracoin101.is","https://min-api.cryptocompare.com" ]
+      "cross-domain-content": ["http://insight.auroracoin.is","http://auroracoin101.is" ]
+  //, "https://api.bitcoinaverage.com/"]
   }
 }
