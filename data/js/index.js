@@ -13,7 +13,7 @@ $(document).ready(function () {
     var val = '',
         address = '',
         SATOSHIS = 100000000,
-        FEE = SATOSHIS * .1,
+        FEE = SATOSHIS * .0001,
         BTCUnits = 'AUR',
         BTCMultiplier = SATOSHIS;
     function setupWallet() {

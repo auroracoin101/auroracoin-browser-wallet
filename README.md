@@ -4,14 +4,23 @@ Auroracoin Browser Wallet Extension 2.0.5 - Provided by Auroracoin Project Team
 Auroracoin wallet in the browser. Send and receive instantly on any web page.
 
 
-Version 1.3   - Updated for Multi-Algo 
+Version 1.3   - Updated for Multi-Algo
+
 Version 2.0   - Updated to use Insight exclusively for blockchain access and tx send
+
 Version 2.0.1 - Removed incompatible API, exchange rates currently unavailable
+
 Version 2.0.2 - Fixed API calls, exchange rates and currencies re-enabled
+
 Version 2.0.3 - Internal Changes related to Github management. 
+
 Version 2.0.4 - Removed BitCoinAverage API, using CryptoCompare
+
 Version 2.0.5 - Removed Context Menu Features and Related Required Permissions 
 
+Version 2.0.6 - Various math fixes
+
+Version 2.0.7 - Using TransactionBuilder now per bitcore warning.  Now under Auroracoin101 github repo.  
 
 Security
 --------
