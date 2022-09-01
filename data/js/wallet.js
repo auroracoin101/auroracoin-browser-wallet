@@ -164,7 +164,9 @@
                 balance = result;
                 if (balanceListener) balanceListener(balance);
                 // Check Auroracoin-node for the current balance
-                util.get(preferences.getSite() + '/api/addr/' + address + '/balance').then(function (response) {
+                // Sep 2022 - replace Insight server with chainz
+                util.get('https://chainz.cryptoid.info/aur/api.dws?q=getbalance&a='+address).then(function (response) {
+                     // util.get(preferences.getSite() + '/api/addr/' + address + '/balance').then(function (response) {
                     balance = response ;    //  * 100000000; //to match SATOSHIS
                     return preferences.setLastBalance(balance);
                 }).then(function () {
