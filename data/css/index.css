@@ -14,8 +14,14 @@ body .modal-dialog {
     overflow: hidden;
 }
 
+body::-webkit-scrollbar{display:none !important;}
+
 #privateKeyQRCode {
     margin-left: 77px;
+}
+
+#privateKey2QRCode {
+       margin-left: 77px;
 }
 
 #qrcode {
@@ -38,6 +44,10 @@ body .modal-dialog {
 #privateKeyText {
     word-wrap: break-word;
 }
+
+#privateKey2Text {
+       word-wrap: break-word;
+   }
 
 .panel {
     margin-bottom: 0px;

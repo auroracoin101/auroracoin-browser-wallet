@@ -1393,6 +1393,9 @@ pre code {
   margin-right: auto;
   margin-left: auto;
 }
+
+#showPrivateKeyModal .modal-content{margin-right: 15px;}
+
 @media (min-width: 768px) {
   .container {
     width: 750px;
