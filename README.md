@@ -1,4 +1,4 @@
-# Auroracoin Browser Wallet Extension 2.0.5 - Provided by Auroracoin Project Team
+# Auroracoin Browser Wallet Extension 2.0.9 - Provided by Auroracoin101 Project Team
 
 Auroracoin wallet in the browser. Send and receive instantly on any web page.
 
