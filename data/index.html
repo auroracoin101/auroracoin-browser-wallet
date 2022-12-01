@@ -1,87 +1,86 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Auroracoin Browser Wallet Extension</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <link href="css/index.css" rel="stylesheet">
-    <script src="js/libs/promise.min.js" type="text/javascript"></script>
-    <script src="js/libs/cryptojs.min.js" type="text/javascript"></script>
-    <script src="js/libs/bitcoinjs-lib.js" type="text/javascript"></script>
-    <script src="js/libs/ecoin.min.js" type="text/javascript"></script>
-    <script src="js/libs/jquery.min.js" type="text/javascript"></script>
-    <script src="js/libs/bootstrap.min.js" type="text/javascript"></script>
-    <script src="js/libs/qrcode.js" type="text/javascript"></script>
-    <script src="js/preferences.js" type="text/javascript"></script>
-    <script src="js/util.js" type="text/javascript"></script>
-    <script src="js/currency-manager.js" type="text/javascript"></script>
-    <script src="js/wallet.js" type="text/javascript"></script>
-    <script src="js/index.js" type="text/javascript"></script>
-    <script src="js/electrumx.js" type="text/javascript"></script>
-
+   <title>Auroracoin Browser Wallet Extension</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
+   <link href="css/bootstrap.css" rel="stylesheet">
+   <link href="css/index.css" rel="stylesheet">
+   <script src="js/libs/promise.min.js" type="text/javascript"></script>
+   <script src="js/libs/cryptojs.min.js" type="text/javascript"></script>
+   <script src="js/libs/bitcoinjs3.js" type="text/javascript"></script>
+   <script src="js/libs/ecoin.min.js" type="text/javascript"></script>
+   <script src="js/libs/jquery.min.js" type="text/javascript"></script>
+   <script src="js/libs/bootstrap.min.js" type="text/javascript"></script>
+   <script src="js/libs/qrcode.js" type="text/javascript"></script>
+   <script src="js/electrumx.js" type="text/javascript"></script>
+   <script src="js/preferences.js" type="text/javascript"></script>
+   <script src="js/util.js" type="text/javascript"></script>
+   <script src="js/currency-manager.js" type="text/javascript"></script>
+   <script src="js/wallet.js" type="text/javascript"></script>
+   <script src="js/index.js" type="text/javascript"></script>
 </head>
 <body>
 
-<div id="cover" style="display: none;"></div>
-<div id="main" class="container">
-    <div id="send" class="row panel panel-primary">
-        <div class="panel-heading">
+   <div id="cover" style="display: none;"></div>
+   <div id="main" class="container">
+      <div id="send" class="row panel panel-primary">
+         <div class="panel-heading">
             Send AUR
             <div class="btn-group">
-                <button type="button" id="settingsButton" class="btn btn-tools btn-small dropdown-toggle" data-toggle="dropdown">
-                    <span class="glyphicon glyphicon-wrench"></span>
-                </button>
-                <ul id="settingsMenu" class="dropdown-menu">
-                    <li><a id="setPassword">Set Password/Encrypt</a></li>
-                    <li><a id="setCurrency">Set Currency</a></li>
-                    <li><a id="setUnits">Set AUR Units</a></li>
-                    <li class="divider">
-                    <li><a id="showPrivateKey">Show Private Key</a></li>
-                    <li><a id="importPrivateKey">Import Private Key</a></li>
-                    <li><a id="generateNewWallet">Generate New Wallet</a></li>
-                    <li class="divider">
+               <button type="button" id="settingsButton" class="btn btn-tools btn-small dropdown-toggle" data-toggle="dropdown">
+                  <span class="glyphicon glyphicon-wrench"></span>
+               </button>
+               <ul id="settingsMenu" class="dropdown-menu">
+                  <li><a id="setPassword">Set Password/Encrypt</a></li>
+                  <li><a id="setCurrency">Set Currency</a></li>
+                  <li><a id="setUnits">Set AUR Units</a></li>
+                  <li class="divider">
+                  <li><a id="showPrivateKey">Show Private Key</a></li>
+                  <li><a id="importPrivateKey">Import Private Key</a></li>
+                  <li><a id="generateNewWallet">Generate New Wallet</a></li>
+                  <li class="divider">
 
-                    <li><a data-toggle="modal" data-target="#tutorialsModal">Tutorial</a></li>
-                    <li><a data-toggle="modal" data-target="#aboutModal">About</a></li>
-                </ul>
+                  <li><a data-toggle="modal" data-target="#tutorialsModal">Tutorial</a></li>
+                  <li><a data-toggle="modal" data-target="#aboutModal">About</a></li>
+               </ul>
             </div>
-        </div>
-        <div class="panel-body">
+         </div>
+         <div class="panel-body">
             <div id="successAlert" class="alert alert-success alert-dismissable"  style="display: none;">
-                <button id="successAlertClose" type="button" class="close">&times;</button>
-                <p id="successAlertLabel">Success</p>
+               <button id="successAlertClose" type="button" class="close">&times;</button>
+               <p id="successAlertLabel">Success</p>
             </div>
             <div id="unknownErrorAlert" class="alert alert-danger alert-dismissable"  style="display: none;">
-                <button id="unkownErrorAlertClose" type="button" class="close">&times;</button>
-                <p id="unknownErrorAlertLabel">Unknown error</p>
+               <button id="unkownErrorAlertClose" type="button" class="close">&times;</button>
+               <p id="unknownErrorAlertLabel">Unknown error</p>
             </div>
             <div class="form-group">
-                <label for="sendAddress">To Address:</label>
-                <div id="addressAlert" class="alert alert-danger" style="display: none;">
-                    Not a valid address.
-                </div>
-                <input type="text" class="form-control" id="sendAddress">
+               <label for="sendAddress">To Address:</label>
+               <div id="addressAlert" class="alert alert-danger" style="display: none;">
+                  Not a valid address.
+               </div>
+               <input type="text" class="form-control" id="sendAddress">
             </div>
             <label id="amountLabel" for="amount">Amount:</label>
             <div id="amountAlert" class="alert alert-danger" style="display: none;">
-                Amount must be greater than zero and less than your balance.
+               Amount must be greater than zero and less than your balance.
             </div>
             <div class="input-group">
-                <input type="number" min="0" step="0.001" class="form-control" id="amount" placeholder="(incl. 0.0001 AUR fee)">
-                <span id="sendUnit" class="input-group-addon">AUR</span>
-                <div class="input-group-btn">
-                    <button id="sendButton" type="submit" class="btn btn-primary">Send</button>
-                </div>
+               <input type="number" min="0" step="0.001" class="form-control" id="amount" placeholder="(incl. 0.0001 AUR fee)">
+               <span id="sendUnit" class="input-group-addon">AUR</span>
+               <div class="input-group-btn">
+                  <button id="sendButton" type="submit" class="btn btn-primary">Send</button>
+               </div>
             </div>
-        </div>
-        <div class="panel-footer">
-            <button type="button" id="addressPopover" class="btn btn-default" data-toggle="modal" data-target="#receiveModal">
-                Receive Address&nbsp;&nbsp;<span class="glyphicon glyphicon-qrcode"></span>
-            </button><br><br>
-            <strong>Balance: <span id="balance">0 AUR</span></strong>
-        </div>
-    </div>
-</div>
+         </div>
+         <div class="panel-footer">
+               <button type="button" id="addressPopover" class="btn btn-default" data-toggle="modal" data-target="#receiveModal">
+                  Receive Address&nbsp;&nbsp;<span class="glyphicon glyphicon-qrcode"></span>
+               </button><br><br>
+               <strong>Balance: <span id="balance">0 AUR</span></strong>
+         </div>
+      </div>
+   </div>
 
 <!-- Receive Address -->
 <div class="modal fade" id="receiveModal">
@@ -287,7 +286,7 @@
                 <h4 class="modal-title">About</h4>
             </div>
             <div class="modal-body">
-                <h5>Auroracoin Wallet v<span id="version">2.0.9</span></h5>
+                <h5>Auroracoin Wallet v<span id="version"></span></h5>
                 <p>Auroracoin Wallet is modified from Bitcoin Wallet developed by Andrew Toth in Toronto, Canada.<br />
                 <a href="https://github.com/auroracoin101/auroracoin-browser-wallet">View the source on GitHub.</a>
                                 <!-- <a href="https://github.com/andrewtoth/BitcoinWallet">View the source on GitHub.</a> -->
@@ -298,6 +297,8 @@
                 <br />
                 <a href="https://code.google.com/p/crypto-js/">CryptoJS</a>
                 <br />
+                <a href="https://github.com/Canada-eCoin/electrum-client-js">Canada-eCoin Electrum Client</a>
+                <br />
                 <a href="http://jquery.com">jQuery</a>
                 <br />
                 <a href="http://getbootstrap.com/">Bootstrap</a>
@@ -305,7 +306,7 @@
                 <a href="http://www.d-project.com/">QR Code Generator</a>
                 </p>
                 <div class="alert alert-info">
-                    <strong>Tip Jar</strong> AKXL5Fxk8dyVyZiDkQNpB45rZfu6tPW2VZ
+                    <strong>Tip Jar</strong> ActKxNP6X7nB6yLNpDrEpJpy5XsCNV7R3B
                 </div>
             </div>
         </div><!-- /.modal-content -->
