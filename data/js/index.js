@@ -188,11 +188,6 @@ $(document).ready(function () {
   $('#balance').click(function () {
     wallet.updateBal();
   });
-  $('#settingsButton').click(function () {
-    electrumxManager.getserver().then(function (response) {
-      window.alert(response.host);
-    });
-  });
 
   function confirmSend() {
     $('#cover').show();
@@ -203,19 +198,21 @@ $(document).ready(function () {
         $('#sendAddress').val(null);
         $('#amountLabel').text('Amount:');
         var text =
-          'Sent ' +
+          '<br><b>Sent:</b> ' +
           val / BTCMultiplier +
           ' ' +
           BTCUnits +
-          ' to ' +
+          ' to <br>' +
           address +
-          '. Transaction: ' +
-          // It is desirable to show user the transaction id for successful broadcast
-          // TODO:  improve layout & present as url link
-          //'<a href="https://chainz.cryptoid.info/aur/tx.dws?' +
-          txid;
-        // '.htm">CryptoId Explorer</a>';
-        $('#successAlertLabel').text(text);
+          '.<span style="overflow-wrap:anywhere"><br><b>Transaction: </b><br>' +
+          '<a href="https://chainz.cryptoid.info/aur/tx.dws?' +
+          txid +
+          '.htm" target="_blank">' +
+          txid +
+          '</a><br>(Transaction should be included in next block or two.)</span>';
+
+        text = $.parseHTML(text);
+        $('#successAlertLabel').append(text);
         $('#successAlert').slideDown();
         $('#sendConfirmationModal').modal('hide');
         $('#cover').fadeOut('slow');
