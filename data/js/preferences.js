@@ -9,8 +9,6 @@
  */
 
 (function (window) {
-  console.log('Entering preferences script', this.name);
-
   var ADDRESS = 'wallet.address',
     PRIVATE_KEY = 'wallet.private_key',
     SCRIPTHASH = 'wallet.scripthash',

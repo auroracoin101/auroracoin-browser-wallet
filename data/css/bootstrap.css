@@ -5,6 +5,12 @@
  */
 
 /*! normalize.css v3.0.2 | MIT License | git.io/normalize */
+
+:root {
+   --aurgreen: #139060;
+   --white: #ffffff;
+ }
+
 html {
   font-family: sans-serif;
   -webkit-text-size-adjust: 100%;
@@ -2852,7 +2858,7 @@ fieldset[disabled] .btn-default.active {
 }
 .btn-primary {
   color: #fff;
-  background-color: #016959;
+  background-color: var(--aurgreen);
   border-color: #006633;
 }
 .btn-primary:hover,
@@ -2862,12 +2868,12 @@ fieldset[disabled] .btn-default.active {
 .btn-primary.active,
 .open > .dropdown-toggle.btn-primary {
   color: #fff;
-  background-color: #016959;
+  background-color: var(--aurgreen);
   border-color: #333;
 }
 .btn-tools {
   color: #fff;
-  background-color: #016959;
+  background-color: var(--aurgreen);
   border-color: #333;
 }
 .btn-tools:hover,
@@ -2877,7 +2883,7 @@ fieldset[disabled] .btn-default.active {
 .btn-tools.active,
 .open > .dropdown-toggle.btn-primary {
   color: #fff;
-  background-color: #016959;
+  background-color: var(--aurgreen);
   border-color: #fff;
 }
 .btn-primary:active,
@@ -5328,7 +5334,7 @@ a.list-group-item-danger.active:focus {
 }
 .panel-primary > .panel-heading {
   color: #fff;
-  background-color: #016959;
+  background-color: var(--aurgreen);
   border-color: #339933;
   background-image: url('../logo-white.png');
   background-repeat: no-repeat;
@@ -5339,7 +5345,7 @@ a.list-group-item-danger.active:focus {
   border-top-color: #339933;
 }
 .panel-primary > .panel-heading .badge {
-  color: #016959;
+  color: var(--aurgreen);
   background-color: #fff;
 }
 .panel-primary > .panel-footer + .panel-collapse > .panel-body {

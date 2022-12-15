@@ -11,8 +11,6 @@
 $(document).ready(function () {
   // Setup the wallet, page values and callbacks
 
-  console.log('Entering index script', this.name);
-
   var val = '',
     address = '',
     SATOSHIS = 100000000,
@@ -21,7 +19,6 @@ $(document).ready(function () {
     BTCMultiplier = SATOSHIS;
 
   function setupWallet() {
-    console.log('index.js.setupWallet');
     wallet
       .restoreAddress()
       .then(setQRCodes, function () {
@@ -32,7 +29,6 @@ $(document).ready(function () {
       });
 
     function setQRCodes() {
-      console.log('index.js.setQRCodes');
       $('#qrcode').html(createQRCodeCanvas(wallet.getAddress()));
       $('#textAddress').text(wallet.getAddress());
     }
@@ -55,9 +51,16 @@ $(document).ready(function () {
 
   // IIFE top-level await - ensures electrumInit resolves before setupWallet
   (async () => {
-    const data = await electrumxManager.electrumInit();
-    console.log(data);
-    setupWallet();
+    //  var host = 'lenoir.ecoincore.com',
+    //    port = 12345,
+    //    type = 'wss';
+    try {
+      const data = await electrumxManager.electrumInit();
+      console.log('Initialize Electrum', data);
+      setupWallet();
+    } catch (err) {
+      console.error(err);
+    }
   })();
 
   $('#amount').on('keyup change', function () {
@@ -144,7 +147,7 @@ $(document).ready(function () {
       validAddress = false;
     } else {
       try {
-        new bitcoinjs3.address.fromBase58Check(address);
+        new bitcoinjs_aur.address.fromBase58Check(address);
       } catch (e) {
         validAddress = false;
       }
@@ -433,7 +436,7 @@ $(document).ready(function () {
   $('#importPrivateKeyConfirm').click(function () {
     var privateKey = $('#importPrivateKeyPrivateKey').val();
     try {
-      new bitcoinjs3.ECPair.fromWIF(privateKey);
+      new bitcoinjs_aur.ECPair.fromWIF(privateKey);
     } catch (e) {
       $('#importPrivateKeyBadPrivateKey').slideDown();
       return;
@@ -485,14 +488,16 @@ $(document).ready(function () {
   });
 
   /*
-   * About
+   * About version and version under auroracoin image
    */
 
   if (typeof chrome !== 'undefined') {
     $('#version').text(chrome.runtime.getManifest().version);
+    $('#version2').text(chrome.runtime.getManifest().version);
   } else {
     addon.port.on('version', function (version) {
       $('#version').text(version);
+      $('#version2').text(version);
     });
   }
 

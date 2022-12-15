@@ -10,7 +10,6 @@
  */
 
 (function (window) {
-  console.log('Entering wallet script', this.name);
   var balance = 0,
     address = '',
     scripthash = '',
@@ -49,7 +48,7 @@
       return new Promise(function (resolve, reject) {
         if (ret.validatePassword(password)) {
           // var eckey = bitcoin.ECKey.makeRandom();
-          var eckey = bitcoinjs3.ECPair.makeRandom();
+          var eckey = bitcoinjs_aur.ECPair.makeRandom();
           if (isEncrypted) {
             if (typeof chrome !== 'undefined') {
               privateKey = CryptoJS.AES.encrypt(eckey.toWIF(), password);
@@ -65,9 +64,9 @@
           }
           //address = eckey.pub.getAddress().toString();
           address = eckey.getAddress();
-          var outputscript = bitcoinjs3.address.toOutputScript(address);
-          var sha = bitcoinjs3.crypto.sha256(outputscript);
-          scripthash = bitcoinjs3.Buffer.from(sha.reverse()).toString('hex');
+          var outputscript = bitcoinjs_aur.address.toOutputScript(address);
+          var sha = bitcoinjs_aur.crypto.sha256(outputscript);
+          scripthash = bitcoinjs_aur.Buffer.from(sha.reverse()).toString('hex');
 
           balance = 0;
           Promise.all([
@@ -115,9 +114,9 @@
           try {
             //create an ECKey from private key
             //var eckey = new bitcoin.ECKey.fromWIF(_privateKey);
-            var eckey = new bitcoinjs3.ECPair.fromWIF(
+            var eckey = new bitcoinjs_aur.ECPair.fromWIF(
               _privateKey,
-              bitcoinjs3.networks.auroracoin
+              bitcoinjs_aur.networks.auroracoin
             );
             if (isEncrypted) {
               if (typeof chrome !== 'undefined') {
@@ -134,9 +133,11 @@
             }
             //address = eckey.pub.getAddress().toString();
             address = eckey.getAddress();
-            var outputscript = bitcoinjs3.address.toOutputScript(address);
-            var sha = bitcoinjs3.crypto.sha256(outputscript);
-            scripthash = bitcoinjs3.Buffer.from(sha.reverse()).toString('hex');
+            var outputscript = bitcoinjs_aur.address.toOutputScript(address);
+            var sha = bitcoinjs_aur.crypto.sha256(outputscript);
+            scripthash = bitcoinjs_aur.Buffer.from(sha.reverse()).toString(
+              'hex'
+            );
             balance = 0;
             Promise.all([
               preferences.setAddress(address),
@@ -208,10 +209,14 @@
     getWIFb0: function (wifKey) {
       try {
         // var newKey = bitcoin.base58check.decode(wifKey);
-        var newKey = bitcoinjs3.bs58check.decode(wifKey);
+        var newKey = bitcoinjs_aur.bs58check.decode(wifKey);
         // newKey.privateKey[0] = 176;
         //var newWif = bitcoin.base58check.encode(newKey);
-        var newWif = bitcoinjs3.bs58check.encode(176, newKey.privateKey, true);
+        var newWif = bitcoinjs_aur.bs58check.encode(
+          176,
+          newKey.privateKey,
+          true
+        );
         //TEST
         // var newKeyString = newWif.toString(CryptoJS.enc.Utf8);
       } catch (e) {
@@ -227,7 +232,7 @@
 
     // "temporary" object array of servers, maybe add IsConnected parameter and more
     servers: [
-      { host: 'lenoir.ecoincore.com', port: 50003, protocol: 'wss' },
+      { host: 'lenoir.ecoincore.com', port: 12345, protocol: 'wss' },
       { host: 'electrumx.aur.ewmcx.info', port: 50003, protocol: 'wss' },
       { host: 'failover.aur.ewmcx.biz', port: 50003, protocol: 'wss' },
     ],
@@ -241,9 +246,9 @@
         // calculate scripthash from address.  important for new release deployment
         console.log('Need to create scripthash');
         alert('Remember to backup your private key.');
-        var outputscript = bitcoinjs3.address.toOutputScript(address);
-        var sha = bitcoinjs3.crypto.sha256(outputscript);
-        scripthash = bitcoinjs3.Buffer.from(sha.reverse()).toString('hex');
+        var outputscript = bitcoinjs_aur.address.toOutputScript(address);
+        var sha = bitcoinjs_aur.crypto.sha256(outputscript);
+        scripthash = bitcoinjs_aur.Buffer.from(sha.reverse()).toString('hex');
         preferences.setScriptHash(scripthash);
         console.log('New ScriptHash: ', scripthash);
       }
@@ -252,18 +257,14 @@
         balance = result;
         if (balanceListener) balanceListener(balance);
         // Check Auroracoin-node for the current balance
-        // Sep 2022 - replace Insight server with chainz
-        // Issue - concerned about response * 100M for conversion to satoshis. is better math fx ?
+
         electrumxManager
           .getbalance(scripthash)
-          //   util
-          //     .get(
-          //       'https://chainz.cryptoid.info/aur/api.dws?q=getbalance&a=' + address
-          //    )
+          //   util.get('https://chainz.cryptoid.info/aur/api.dws?q=getbalance&a=' + address)
           .then(function (response) {
             // util.get(preferences.getSite() + '/api/addr/' + address + '/balance').then(function (response) {
             //balance = response * 100000000; //to match SATOSHIS
-            console.log(response);
+            console.log('Get Electrum Balance', response);
             balance = Number(response.confirmed);
             return preferences.setLastBalance(balance);
           })
@@ -321,20 +322,21 @@
             var inputs = json, // .unspent_outputs,
               selectedOuts = [],
               //prepare a key to sign the tx
-              eckey = bitcoinjs3.ECPair.fromWIF(decryptedPrivateKey),
+              eckey = bitcoinjs_aur.ECPair.fromWIF(decryptedPrivateKey),
               // Total cost is amount plus fee
+              // fee = 0;
               txValue = Number(amount) + Number(fee),
               availableValue = 0,
               inputAmount = Number(0.0);
+            // fee = 0;
             // Gather enough inputs so that their value is greater than or equal to the total cost
             for (var i = 0; i < inputs.length; i++) {
               selectedOuts.push(inputs[i]);
               //inputAmount = parseInt((inputs[i].amount * 100000000).toFixed(0), 10  );
-              inputAmount = inputs[i].value;
+              inputAmount = Number(inputs[i].value);
 
-              console.log('inputAmount ' + inputAmount.toString());
-              availableValue = availableValue + inputAmount; // inputs[i].value;
-              console.log('availableValue ' + availableValue.toString());
+              // TODO - do not use fixed fee, keep track of selectedOuts for fee/byte
+              availableValue = availableValue + inputAmount;
               if (availableValue - txValue >= 0) break;
             }
 
@@ -342,25 +344,15 @@
             if (availableValue - txValue < 0) {
               reject(Error('Insufficient funds'));
             } else {
-              // Create the transaction
-              var txb = new bitcoinjs3.TransactionBuilder();
-              // Add all our unspent outputs to the transaction as the inputs
+              var txb = new bitcoinjs_aur.TransactionBuilder();
               for (i = 0; i < selectedOuts.length; i++) {
                 txb.addInput(selectedOuts[i].tx_hash, selectedOuts[i].tx_pos);
               }
-              // Add the send address to the transaction as the output
               txb.addOutput(sendAddress, amount);
-              // Add any leftover value to the transaction as an output pointing back to this wallet,
-              // minus the fee of course
               changeValue = availableValue - txValue;
               if (changeValue > 0) {
-                //change this to wallet's address
                 txb.addOutput(eckey.getAddress(), changeValue);
               }
-
-              // If we want to encode a OP_RETURN we can do that here
-              // const data = Buffer.from('YOUR OP_RETURN DATA HERE', 'utf8');
-              // const dataScript = bitcoinjs.script.nullData.output.encode(data);
 
               // Sign all the input hashes
               for (i = 0; i < txb.tx.ins.length; i++) {
@@ -368,40 +360,25 @@
               }
               // Push the transaction to Auroracoin-node
               var txdata = txb.build().toHex();
-              console.log(txdata);
+              //console.log(txdata);
               electrumxManager
                 .broadcastrawtx(txdata)
-                .then(
-                  function (result) {
-                    let txResponse = result;
-                    var newtxid = txResponse;
-                    if (newtxid != '') {
-                      // success = response;
-                      preferences.setLastBalance(balance - amount - fee);
-                      // if (success == 200)
-                      resolve(newtxid);
-                      return newtxid;
-                    } else {
-                      reject(Error('Unknown error'));
-                    }
-                    // if (success == 500)
-                    // but don't set the balance since the the wallet will update when it relaods
-                    /* always put errorHandler in the last 'then' with a 'null' logic handler, 
-                                    so that all errors will be caught 
-                                    someModule.promiseFunc()
-                                          .then(function (data) { //TODO other logic  })
-                                          .then(null, errorHandler);
-                                    */
-                  },
-                  function (error) {
-                    console.log('Error: ', error);
-                    alert(error);
-                    reject(Error(error));
+                .then(function (result) {
+                  //let txResponse = result;
+                  //var newtxid = txResponse;
+                  if (result != '') {
+                    // success = response;
+                    preferences.setLastBalance(balance - amount - fee);
+                    // if (success == 200)
+                    resolve(result);
+                    return result;
+                  } else {
+                    reject(Error(result));
                   }
-                )
-                .catch((error) => {
+                })
+                .catch(function (error) {
                   console.error({ error });
-                  alert(error);
+                  //alert(error);
                   reject(Error(error));
                 });
             }

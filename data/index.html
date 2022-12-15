@@ -7,7 +7,7 @@
    <link href="css/index.css" rel="stylesheet">
    <script src="js/libs/promise.min.js" type="text/javascript"></script>
    <script src="js/libs/cryptojs.min.js" type="text/javascript"></script>
-   <script src="js/libs/bitcoinjs3.js" type="text/javascript"></script>
+   <script src="js/libs/bitcoinjs-aur.js" type="text/javascript"></script>
    <script src="js/libs/ecoin.min.js" type="text/javascript"></script>
    <script src="js/libs/jquery.min.js" type="text/javascript"></script>
    <script src="js/libs/bootstrap.min.js" type="text/javascript"></script>
@@ -73,11 +73,28 @@
                </div>
             </div>
          </div>
-         <div class="panel-footer">
+         <div class="panel-footer footer_row">
+            <div class="footer_column">
                <button type="button" id="addressPopover" class="btn btn-default" data-toggle="modal" data-target="#receiveModal">
                   Receive Address&nbsp;&nbsp;<span class="glyphicon glyphicon-qrcode"></span>
                </button><br><br>
                <strong>Balance: <span id="balance">0 AUR</span></strong>
+            </div>
+            <div class="footer_column_image" align="center">
+               <img src="auroracoin48.png">
+               <br>v<span id="version2"></span>
+            </div>
+            <!--  
+            <div class="footer_inner_left">
+               <button type="button" id="addressPopover" class="btn btn-default" data-toggle="modal" data-target="#receiveModal">
+                  Receive Address&nbsp;&nbsp;<span class="glyphicon glyphicon-qrcode"></span>
+               </button><br><br>
+               <strong>Balance: <span id="balance">0 AUR</span></strong>
+            </div>
+            <div class="footer_inner_right">
+               <img src="auroracoin48.png">
+            </div>
+            -->
          </div>
       </div>
    </div>
@@ -283,11 +300,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">About</h4>
+                <h4 class="modal-title">About Auroracoin Browser Wallet v<span id="version"></span></h4>
             </div>
             <div class="modal-body">
-                <h5>Auroracoin Wallet v<span id="version"></span></h5>
+                <!-- <h5>Auroracoin Browser Wallet v<span id="version"></span></h5> -->
                 <p>Auroracoin Wallet is modified from Bitcoin Wallet developed by Andrew Toth in Toronto, Canada.<br />
+                <br>Auroracoin101 maintains and deploys the Auroracoin Wallet.
                 <a href="https://github.com/auroracoin101/auroracoin-browser-wallet">View the source on GitHub.</a>
                                 <!-- <a href="https://github.com/andrewtoth/BitcoinWallet">View the source on GitHub.</a> -->
                 </p>

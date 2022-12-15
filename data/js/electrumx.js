@@ -18,7 +18,7 @@
 
   const MINUTES = 60000;
 
-  const electrum = new ecoin.ElectrumClient(
+  var electrum = new ecoin.ElectrumClient(
     'failover.aur.ewmcx.biz',
     50003,
     'wss'
@@ -34,6 +34,7 @@
         return utxo;
       } catch (error) {
         console.error({ error });
+        throw error;
       }
     },
     broadcastrawtx: async (rawtx) => {
@@ -42,7 +43,7 @@
         return txhash;
       } catch (error) {
         console.error({ error });
-        return error;
+        throw error;
       }
     },
 
@@ -54,6 +55,7 @@
         return balance;
       } catch (error) {
         console.error({ error });
+        throw error;
       }
     },
     subscribeScriptHash: async (scripthash) => {
@@ -66,25 +68,18 @@
         return scripthashStatus;
       } catch (error) {
         console.error({ error });
-        return error;
+        throw error;
       }
     },
     electrumInit: async () => {
       try {
         // removed automatic subscribes until we are able to process messages
-        /*  electrum.subscribe.on('blockchain.headers.subscribe', (blob) => {
-          console.log(blob);
-        });
-
-        electrum.subscribe.on('blockchain.scripthash.subscribe', (blob) => {
-          console.log(blob);
-        }); */
-
+        /*  electrum.subscribe.on('blockchain.headers.subscribe', (blob) => {          console.log(blob);        });
+        electrum.subscribe.on('blockchain.scripthash.subscribe', (blob) => {          console.log(blob);        }); */
         // TODO pass in server parameters and manage electrum "active" connection(s)
+
         var ret = await electrum.connect();
-        console.log('Electrum Connected');
         const ver = await electrum.server_version('aur-wallet', '1.4');
-        console.log('Negotiated version:', ver);
         // Keep connection alive.
         setInterval(async () => {
           console.log('ping');
@@ -100,7 +95,7 @@
         //console.log('Latest header:', header);
       } catch (error) {
         console.error({ error });
-        return error;
+        throw error;
       }
     },
   };
