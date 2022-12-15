@@ -22,7 +22,7 @@ Version 2.0.7 - Using TransactionBuilder now per bitcore warning. Now under Auro
 
 Version 2.0.8 - Using chainz.cryptoid.info/aur as Blockchain Address Explorer
 
-Version 2.0.9 - Updated Logo to 2020 version. Also display Private Key using Desktop wallet format.
+Version 2.0.9 - Updated Logo to 2020 version. Also display Alternate Private Key using Auroracoin Desktop wallet format.
 
 Version 2.1.0 - Moved Blockchain Interface to Electrum(x) SPV servers. Begin eCoinCore Integration.
 
@@ -31,9 +31,7 @@ Version 2.1.0 - Moved Blockchain Interface to Electrum(x) SPV servers. Begin eCo
 The private key is stored securely in your local browser storage and you may choose to encrypt it,
 for added Security.
 
-Transactions are signed in the browser and are published to Auroracoin Network via Insight.auroracoin.is.
-( Note: Insight server no longer running. Investigating new methods for transaction broadcasting.
-Currently you will have to "Show Private Key" and use Alternative key to import into Desktop Wallet)
+Transactions are signed in the browser and are published to Auroracoin Network via Electrum(x) Servers.
 
 The private key will only leave the browser to be synced with other Chrome browsers you are signed into,
 This is managed by the Browser Software.
