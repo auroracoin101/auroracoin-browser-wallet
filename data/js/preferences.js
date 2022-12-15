@@ -9,117 +9,124 @@
  */
 
 (function (window) {
+  var ADDRESS = 'wallet.address',
+    PRIVATE_KEY = 'wallet.private_key',
+    SCRIPTHASH = 'wallet.scripthash',
+    IS_ENCRYPTED = 'wallet.is_encrypted',
+    LAST_BALANCE = 'wallet.last_balance',
+    EXCHANGE_RATE = 'wallet.exchange_rate',
+    BTC_UNITS = 'wallet.btc_units',
+    CURRENCY = 'wallet.currency',
+    SITE = 'http://insight.auroracoin.is',
+    preferences = function () {};
 
-    var ADDRESS = "wallet.address",
-        PRIVATE_KEY = "wallet.private_key",
-        IS_ENCRYPTED = "wallet.is_encrypted",
-        LAST_BALANCE = "wallet.last_balance",
-        EXCHANGE_RATE = 'wallet.exchange_rate',
-        BTC_UNITS = 'wallet.btc_units',
-        CURRENCY = 'wallet.currency',
-        SITE = 'http://insight.auroracoin.is',
-        preferences = function() {};
-
-    function sync() {
-        return new Promise(function (resolve) {
-            // Different APIs for Chrome and Firefox
-            if (typeof chrome !== 'undefined') {
-                var object = {};
-                object[ADDRESS] = '';
-                object[PRIVATE_KEY] = '';
-                object[IS_ENCRYPTED] = false;
-                object[LAST_BALANCE] = 0;
-                object[EXCHANGE_RATE] = 0;
-                object[BTC_UNITS] = 'AUR';
-                object[CURRENCY] = 'ISK';
-                chrome.storage.sync.get(object, resolve);
+  function sync() {
+    return new Promise(function (resolve) {
+      // Different APIs for Chrome and Firefox
+      if (typeof chrome !== 'undefined') {
+        var object = {};
+        object[ADDRESS] = '';
+        object[PRIVATE_KEY] = '';
+        object[SCRIPTHASH] = '';
+        object[IS_ENCRYPTED] = false;
+        object[LAST_BALANCE] = 0;
+        object[EXCHANGE_RATE] = 0;
+        object[BTC_UNITS] = 'AUR';
+        object[CURRENCY] = 'ISK';
+        chrome.storage.sync.get(object, resolve);
+      } else {
+        util
+          .message('get')
+          .then(function (message) {
+            if (typeof message[PRIVATE_KEY] === 'undefined') {
+              message[ADDRESS] = '';
+              message[PRIVATE_KEY] = '';
+              message[SCRIPTHASH] = '';
+              message[IS_ENCRYPTED] = false;
+              message[LAST_BALANCE] = 0;
+              message[EXCHANGE_RATE] = 0;
+              message[BTC_UNITS] = 'AUR';
+              message[CURRENCY] = 'ISK';
+              return util.message('save', message);
             } else {
-                util.message('get').then(function (message) {
-                    if (typeof message[PRIVATE_KEY] === 'undefined') {
-                        message[ADDRESS] = '';
-                        message[PRIVATE_KEY] = '';
-                        message[IS_ENCRYPTED] = false;
-                        message[LAST_BALANCE] = 0;
-                        message[EXCHANGE_RATE] = 0;
-                        message[BTC_UNITS] = 'AUR';
-                        message[CURRENCY] = 'ISK';
-                        return util.message('save', message);
-                    } else {
-                        return message;
-                    }
-                }).then(function (message) {
-                    resolve(message);
-                });
+              return message;
             }
-        });
-    }
+          })
+          .then(function (message) {
+            resolve(message);
+          });
+      }
+    });
+  }
 
-    function get(pref) {
-        return function () {
-            return sync().then(function (values) {
-                return values[pref];
-            });
-        };
+  function get(pref) {
+    return function () {
+      return sync().then(function (values) {
+        return values[pref];
+      });
     };
+  }
 
-    function set(key, value) {
-        return new Promise(function (resolve) {
-            var object = {};
-            object[key] = value;
-            // Different APIs for Chrome and Firefox
-            if (typeof chrome !== 'undefined') {
-                chrome.storage.sync.set(object, resolve);
-            } else {
-                util.message('save', object).then(resolve);
-            }
-        });
-    };
+  function set(key, value) {
+    return new Promise(function (resolve) {
+      var object = {};
+      object[key] = value;
+      // Different APIs for Chrome and Firefox
+      if (typeof chrome !== 'undefined') {
+        chrome.storage.sync.set(object, resolve);
+      } else {
+        util.message('save', object).then(resolve);
+      }
+    });
+  }
 
-    preferences.prototype = {
+  preferences.prototype = {
+    getAddress: get(ADDRESS),
+    setAddress: function (address) {
+      return set(ADDRESS, address);
+    },
 
-        getAddress: get(ADDRESS),
-        setAddress: function (address) {
-            return set(ADDRESS, address);
-        },
+    getScriptHash: get(SCRIPTHASH),
+    setScriptHash: function (scripthash) {
+      return set(SCRIPTHASH, scripthash);
+    },
 
-        getPrivateKey: get(PRIVATE_KEY),
-        setPrivateKey: function (privateKey) {
-            return set(PRIVATE_KEY, privateKey);
-        },
+    getPrivateKey: get(PRIVATE_KEY),
+    setPrivateKey: function (privateKey) {
+      return set(PRIVATE_KEY, privateKey);
+    },
 
-        getIsEncrypted: get(IS_ENCRYPTED),
-        setIsEncrypted: function (isEncrypted) {
-            return set(IS_ENCRYPTED, isEncrypted);
-        },
+    getIsEncrypted: get(IS_ENCRYPTED),
+    setIsEncrypted: function (isEncrypted) {
+      return set(IS_ENCRYPTED, isEncrypted);
+    },
 
-        getLastBalance: get(LAST_BALANCE),
-        setLastBalance: function (lastBalance) {
-            return set(LAST_BALANCE, lastBalance);
-        },
+    getLastBalance: get(LAST_BALANCE),
+    setLastBalance: function (lastBalance) {
+      return set(LAST_BALANCE, lastBalance);
+    },
 
-        getExchangeRate: get(EXCHANGE_RATE),
-        setExchangeRate: function (exchangeRate) {
-            return set(EXCHANGE_RATE, exchangeRate);
-        },
+    getExchangeRate: get(EXCHANGE_RATE),
+    setExchangeRate: function (exchangeRate) {
+      return set(EXCHANGE_RATE, exchangeRate);
+    },
 
-        getBTCUnits: get(BTC_UNITS),
-        setBTCUnits: function (btcUnits) {
-            return set(BTC_UNITS, btcUnits);
-        },
+    getBTCUnits: get(BTC_UNITS),
+    setBTCUnits: function (btcUnits) {
+      return set(BTC_UNITS, btcUnits);
+    },
 
-        getCurrency: get(CURRENCY),
-        setCurrency: function (currency) {
-            return set(CURRENCY, currency).then(function () {
-                currencyManager.updateExchangeRate();
-            });
-        },
+    getCurrency: get(CURRENCY),
+    setCurrency: function (currency) {
+      return set(CURRENCY, currency).then(function () {
+        currencyManager.updateExchangeRate();
+      });
+    },
 
-        getSite: function () {
-            return SITE;
-        }
+    getSite: function () {
+      return SITE;
+    },
+  };
 
-    };
-
-    window.preferences = new preferences();
-
+  window.preferences = new preferences();
 })(window);

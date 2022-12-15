@@ -1,11 +1,11 @@
 {
   "name": "auroracoinwallet",
-  "title": "Auroracoin 2.0.9 Chromium Browser Extension",
+  "title": "Auroracoin 2.1.0 Chromium Browser Extension",
   "description": "Auroracoin wallet in the browser. Send and receive instantly on any web page.",
   "author": "Andrew Toth, modified by Joseph Lee, and Skatefish",
   "license": "MIT",
-  "version": "2.0.9",
+  "version": "2.1.0",
   "permissions": {
-      "cross-domain-content": ["http://insight.auroracoin.is","http://auroracoin101.is" ]
+      "cross-domain-content": ["http://auroracoin101.is" ]
   }
 }
