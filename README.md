@@ -1,4 +1,4 @@
-# Auroracoin Browser Wallet Extension 2.1.0 - Provided by Auroracoin Project Team
+# Auroracoin Browser Wallet Extension 2.1.2 - Provided by Auroracoin Project Team
 
 Auroracoin wallet in the browser. Send and receive instantly on any web page.
 
@@ -25,6 +25,10 @@ Version 2.0.8 - Using chainz.cryptoid.info/aur as Blockchain Address Explorer
 Version 2.0.9 - Updated Logo to 2020 version. Also display Alternate Private Key using Auroracoin Desktop wallet format.
 
 Version 2.1.0 - Moved Blockchain Interface to Electrum(x) SPV servers. Begin eCoinCore Integration.
+
+Version 2.1.1 - Improved Fallback
+
+Version 2.1.2 - Added electrum1.valhala.is
 
 ## Security
 
