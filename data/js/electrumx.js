@@ -1,3 +1,4 @@
+
 /**
  * electrumx.js
  * Copyright (c) 2022 Mikael Hannes
@@ -7,30 +8,43 @@
  *
  * electrumx handles communication with electrumx server via ecoin.min.js
  */
-
 (function (window) {
-  var electrumxManager = function () {};
-
-  //  const servers = [{ 'host': 'lenoir.ecoincore.com', port: 50003, protocol: 'wss' },
-  //  host2 = { 'host': 'electrumx.aur.ewmcx.info', port: 50003, protocol: 'wss' },
-  //  host3 = { 'host': 'failover.aur.ewmcx.biz', port: 50003, protocol: 'wss' },
-  //  ]
+  var electrumxManager = function () {
+    this.electrum = null; // Initially null, will be assigned later
+  };
 
   const MINUTES = 60000;
+  
+  // List of Electrum servers
+  const electrumServers = [
+    { host: 'electrum1.valhala.is', port: 50004, protocol: 'wss' },
+    { host: 'failover.aur.ewmcx.biz', port: 50003, protocol: 'wss' },
+    { host: 'electrumx.aur.ewmcx.info', port: 50003, protocol: 'wss' },
+    { host: 'lenoir.ecoincore.com', port: 50003, protocol: 'wss' },
+  ];
 
-  var electrum = new ecoin.ElectrumClient(
-    'failover.aur.ewmcx.biz',
-    50003,
-    'wss'
-  );
+  // Attempt to connect to each server
+  async function tryElectrumServers(manager) {
+    for (const server of electrumServers) {
+      try {
+        manager.electrum = new ecoin.ElectrumClient(server.host, server.port, server.protocol);
+        await manager.electrum.connect();
+        console.log(`Connected to Electrum server: ${server.host}`);
+        return;
+      } catch (err) {
+        console.error(`Failed to connect to Electrum server: ${server.host}`, err);
+      }
+    }
+    throw new Error('All Electrum servers failed to connect.');
+  }
 
   electrumxManager.prototype = {
     getserver: async () => {
-      return electrum;
+      return this.electrum;
     },
     getutxo: async (scripthash) => {
       try {
-        var utxo = await electrum.blockchain_scripthash_listunspent(scripthash);
+        var utxo = await this.electrum.blockchain_scripthash_listunspent(scripthash);
         return utxo;
       } catch (error) {
         console.error({ error });
@@ -39,7 +53,7 @@
     },
     broadcastrawtx: async (rawtx) => {
       try {
-        var txhash = await electrum.blockchain_transaction_broadcast(rawtx);
+        var txhash = await this.electrum.blockchain_transaction_broadcast(rawtx);
         return txhash;
       } catch (error) {
         console.error({ error });
@@ -49,7 +63,7 @@
 
     getbalance: async (scripthash) => {
       try {
-        var balance = await electrum.blockchain_scripthash_getBalance(
+        var balance = await this.electrum.blockchain_scripthash_getBalance(
           scripthash
         );
         return balance;
@@ -60,7 +74,7 @@
     },
     subscribeScriptHash: async (scripthash) => {
       try {
-        const scripthashStatus = await electrum.blockchain_scripthash_subscribe(
+        const scripthashStatus = await this.electrum.blockchain_scripthash_subscribe(
           scripthash
         );
 
@@ -77,13 +91,15 @@
         /*  electrum.subscribe.on('blockchain.headers.subscribe', (blob) => {          console.log(blob);        });
         electrum.subscribe.on('blockchain.scripthash.subscribe', (blob) => {          console.log(blob);        }); */
         // TODO pass in server parameters and manage electrum "active" connection(s)
+        
+        await tryElectrumServers(this); // Try connecting to available servers
 
-        var ret = await electrum.connect();
-        const ver = await electrum.server_version('aur-wallet', '1.4');
+        // var ret = await electrum.connect();
+        const ver = await this.electrum.server_version('aur-wallet', '1.4');
         // Keep connection alive.
         setInterval(async () => {
           console.log('ping');
-          await electrum.server_ping();
+          await this.electrum.server_ping();
         }, 8 * MINUTES);
 
         return ver;

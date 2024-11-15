@@ -38,28 +38,27 @@ $(document).ready(function () {
     setBalance(balance);
   });
 
-  //const host1 = { 'lenoir.ecoincore.com', 50003, 'wss' },
-  //host2 = { 'electrumx.aur.ewmcx.info', 50003, 'wss' },
-  //host3 = { 'failover.aur.ewmcx.biz', 50003, 'wss' };
-
-  //   let electrumservers = [
-  //    {  "host": "lenoir.ecoincore.com" ,
-  //       "port": 50003 ,
-  //       "type": "wss" },
-  //   ];
-  //   const electrumx = new ecoin.ElectrumClient(electrumservers[0]);
-
   // IIFE top-level await - ensures electrumInit resolves before setupWallet
   (async () => {
     //  var host = 'lenoir.ecoincore.com',
     //    port = 12345,
     //    type = 'wss';
     try {
+      // #11 - placing setupWallet here works, but it relies on electrum to get balance
+      // 
+      //setupWallet();
       const data = await electrumxManager.electrumInit();
-      console.log('Initialize Electrum', data);
-      setupWallet();
+      //console.log('Initialize Electrum', data);
+      // chatgpt:  the following line ideally would run even if electrumInit fails
+      // setupWallet();
     } catch (err) {
+      console.error('electrumInit');
       console.error(err);
+    } finally {
+      // #11 - Ensure setupWallet runs even if ElectrumInit fails
+      // but setupWallet currently not running when electrumInit fails above it seems
+      // only when in debugger mode and stepping through issues does it run ?  ( exceptions ? )
+      setupWallet();
     }
   })();
 
