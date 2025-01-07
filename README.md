@@ -30,6 +30,8 @@ Version 2.1.1 - Improved Fallback
 
 Version 2.1.2 - Added electrum1.valhala.is
 
+Version 2.1.3 - ( In process ) - development on OP_RETURN functionality ( burn -> kaspa ) 
+
 ## Security
 
 The private key is stored securely in your local browser storage and you may choose to encrypt it,

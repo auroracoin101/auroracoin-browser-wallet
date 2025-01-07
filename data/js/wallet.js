@@ -349,6 +349,26 @@
                 txb.addInput(selectedOuts[i].tx_hash, selectedOuts[i].tx_pos);
               }
               txb.addOutput(sendAddress, amount);
+
+              //const messageHex = "6b617370613a71726175686633746e6e67643579656e70786c6873727a6a66643470703736747572687965347665796339307033737030757864356438756a74713361";
+              // The Kaspa address as a string
+              const kaspaddr = "kaspa:qrauh...coming.soon.proof.of.burn...tq3a";
+
+              // Convert the string into a hexadecimal representation using CryptoJS
+              const messageHex = CryptoJS.enc.Hex.stringify(CryptoJS.enc.Utf8.parse(kaspaddr));
+
+              // Convert the string to its hexadecimal representation
+              //const messageHex = Buffer.from(kaspaddr, "utf8").toString("hex");
+              console.log(messageHex);
+
+              txb.addOutput(bitcoinjs_aur.script.compile(
+                [
+                  bitcoinjs_aur.opcodes.OP_RETURN,
+                  bitcoinjs_aur.Buffer.from(messageHex, "hex")
+                ]), 0
+              ); // The amount is zero for OP_RETURN
+
+
               changeValue = availableValue - txValue;
               if (changeValue > 0) {
                 txb.addOutput(eckey.getAddress(), changeValue);
