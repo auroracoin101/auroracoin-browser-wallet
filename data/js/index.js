@@ -8,6 +8,21 @@
  * Controls index.html, the main wallet Chrome popover/Firefox panel
  */
 
+function loadStyleSheet(href) {
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = href;
+  document.head.appendChild(link);
+}
+
+if (false) {
+  loadStyleSheet('css/index-dark.css');
+} else {
+  loadStyleSheet('css/index-light.css');
+}
+
+// loadStyleSheet('css/index.css');
+
 $(document).ready(function () {
   // Setup the wallet, page values and callbacks
 
