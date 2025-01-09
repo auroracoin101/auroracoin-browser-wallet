@@ -32,7 +32,7 @@ function loadStyleSheet(href) {
   } catch (err) {
     console.error('Error loading theme preference:', err);
     // Fallback to a default theme
-    loadStyleSheet('css/index-lightdark.css');
+    loadStyleSheet('css/index-light.css');
   }
 })();
 
