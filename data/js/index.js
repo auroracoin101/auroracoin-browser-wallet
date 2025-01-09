@@ -15,11 +15,32 @@ function loadStyleSheet(href) {
   document.head.appendChild(link);
 }
 
-if (false) {
-  loadStyleSheet('css/index-dark.css');
-} else {
-  loadStyleSheet('css/index-light.css');
-}
+(async () => {
+  try {
+    // Wait for preferences to load
+    const theme = await preferences.getTheme();
+    console.log('Theme preference:', theme);
+
+    // Dynamically load the theme's stylesheet
+    if (theme === 'DARK') {
+      loadStyleSheet('css/index-dark.css');
+      // preferences.setTheme('LIGHT');
+    } else {
+      loadStyleSheet('css/index-light.css');
+      //preferences.setTheme('DARK');
+    }
+  } catch (err) {
+    console.error('Error loading theme preference:', err);
+    // Fallback to a default theme
+    loadStyleSheet('css/index-lightdark.css');
+  }
+})();
+
+// if (true) {
+//   loadStyleSheet('css/index-dark.css');
+// } else {
+//   loadStyleSheet('css/index-light.css');
+// }
 
 // loadStyleSheet('css/index.css');
 
@@ -55,24 +76,12 @@ $(document).ready(function () {
 
   // IIFE top-level await - ensures electrumInit resolves before setupWallet
   (async () => {
-    //  var host = 'lenoir.ecoincore.com',
-    //    port = 12345,
-    //    type = 'wss';
     try {
-      // #11 - placing setupWallet here works, but it relies on electrum to get balance
-      // 
-      //setupWallet();
       const data = await electrumxManager.electrumInit();
-      //console.log('Initialize Electrum', data);
-      // chatgpt:  the following line ideally would run even if electrumInit fails
-      // setupWallet();
     } catch (err) {
       console.error('electrumInit');
       console.error(err);
     } finally {
-      // #11 - Ensure setupWallet runs even if ElectrumInit fails
-      // but setupWallet currently not running when electrumInit fails above it seems
-      // only when in debugger mode and stepping through issues does it run ?  ( exceptions ? )
       setupWallet();
     }
   })();
@@ -138,9 +147,7 @@ $(document).ready(function () {
 
   /*   *  Send AUR    */
   $('#sendButton').click(function () {
-    // val = Math.floor(Number($('#amount').val() * BTCMultiplier));
     val = Math.round(Number($('#amount').val() * BTCMultiplier));
-    // val = Math.floor(Number($('#amount').val() * 1e8));
     address = $('#sendAddress').val();
     var balance = wallet.getBalance();
     var validAmount = true;
