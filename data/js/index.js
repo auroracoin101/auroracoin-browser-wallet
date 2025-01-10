@@ -16,24 +16,46 @@ function loadStyleSheet(href) {
 }
 
 (async () => {
+  const themeToggleHandler = async () => {
+    try {
+      // Get the current theme
+      const currentTheme = await preferences.getTheme();
+      const newTheme = currentTheme === 'DARK' ? 'LIGHT' : 'DARK';
+
+      // Save the new theme preference
+      await preferences.setTheme(newTheme);
+
+      // Remove only the theme-related stylesheet
+      const themeStylesheets = document.querySelectorAll('link[rel="stylesheet"]');
+      themeStylesheets.forEach(sheet => {
+        if (sheet.href.includes('index-dark.css') || sheet.href.includes('index-light.css')) {
+          sheet.parentNode.removeChild(sheet);
+        }
+      });
+
+      // Load the new theme's stylesheet
+      loadStyleSheet(newTheme === 'DARK' ? 'css/index-dark.css' : 'css/index-light.css');
+
+      console.log(`Theme switched to: ${newTheme}`);
+    } catch (err) {
+      console.error('Error toggling theme:', err);
+    }
+  };
+
   try {
-    // Wait for preferences to load
+    // Initial theme setup
     const theme = await preferences.getTheme();
     console.log('Theme preference:', theme);
 
-    // Dynamically load the theme's stylesheet
-    if (theme === 'DARK') {
-      loadStyleSheet('css/index-dark.css');
-      // preferences.setTheme('LIGHT');
-    } else {
-      loadStyleSheet('css/index-light.css');
-      //preferences.setTheme('DARK');
-    }
+    loadStyleSheet(theme === 'DARK' ? 'css/index-dark.css' : 'css/index-light.css');
   } catch (err) {
     console.error('Error loading theme preference:', err);
     // Fallback to a default theme
     loadStyleSheet('css/index-light.css');
   }
+
+  // Attach the event listener to the logo
+  document.getElementById('logo').addEventListener('click', themeToggleHandler);
 })();
 
 // if (true) {
