@@ -1,0 +1,277 @@
+
+
+a:hover {
+    color: #428bca;
+    text-decoration: none !important;
+}
+
+audio,
+canvas,
+progress,
+video {
+  opacity: 0.8;
+  border: 10px solid white;
+}
+
+body .modal-dialog {
+    margin: 0px;
+    width: 360px;
+    overflow: hidden;
+}
+
+body::-webkit-scrollbar{display:none !important;}
+
+r-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+#cover {
+    background: url("ajax-loader.gif") no-repeat scroll center center rgba(255,255,255,0.5);
+    z-index: 2147483647;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+#newPassword{margin-bottom: 10px;}
+
+#sendConfirmationText,
+#privateKeyText {
+    word-wrap: break-word;
+}
+
+#privateKey2Text {
+       word-wrap: break-word;
+   }
+
+#privateKeyQRCode {
+    margin-left: 77px;
+}
+
+#privateKey2QRCode {
+       margin-left: 77px;
+}
+
+#qrcode {
+    margin-left: 86px;
+}
+
+#settingsButton {
+    margin-left: 219px;
+    background: #1b5952;
+}
+
+#settingsMenu {
+    margin-left: 76px;
+    background-color: #242f2f;
+}
+
+.no-padding {
+    margin: 0px;
+}
+
+.alert-danger {
+  color: #ccc;
+  background-color: #a94442;
+  opacity: 0.9;
+}
+
+.alert-danger .alert-link {
+  color: #d25350;
+}
+
+.alert-info {
+  border-color: #a6d5ff;
+  color: #a6d5ff;
+  background-color: rgb(47, 91, 126);
+  opacity: 0.9;
+}
+
+.alert-success {
+  color: #a9faa9;
+  background-color: #134c14;
+  border-color: green;
+  opacity: 0.9;
+}
+
+.alert-warning {
+  color: #ffca79;
+  background-color: #775300;
+  border-color: #f2b539;
+  opacity: 0.9;
+}
+
+.btn.active.focus {
+  outline: reset;
+  outline-offset: -1px;
+}
+
+.btn-danger {
+  color: #ffdcdc;
+  border-color: #ff1d1d;
+}
+
+.btn-default {
+  color: #ccc;
+  background-color: #292929;
+  border-color: #444;
+}
+
+.btn-default:hover,
+.btn-default:focus,
+.btn-default.focus,
+.btn-default:active,
+.btn-default.active,
+.open > .dropdown-toggle.btn-default {
+  color: #ccc;
+  background-color: #444;
+  border-color: #ccc;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary.focus,
+.btn-primary:active,
+.btn-primary.active,
+.open > .dropdown-toggle.btn-primary {
+  color: #fff;
+  background-color: var(--aurgreen);
+  border-color: transparent;
+}
+
+.btn-tools:hover,
+.btn-tools:focus,
+.btn-tools.focus,
+.btn-tools:active,
+.btn-tools.active,
+.open > .dropdown-toggle.btn-primary {
+  color: #fff;
+  background-color: var(--aurgreen);
+  border-color: #7efc00;
+}
+
+.close {
+  color: #ccc;
+  opacity: 1;
+}
+
+.container {
+    background-color: #000;
+    margin-left: 0px;
+    width: 360px;
+}
+
+.dropdown-menu {
+  background-color: #101010;
+  border: 1px solid #444;
+}
+
+.dropdown-menu .divider {
+  background-color: #3e3e3e;
+}
+
+.dropdown-menu > li > a {
+  color: #acacac;
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+  color: white;
+  background-color: #215940;
+  cursor: pointer;
+}
+
+.footer_inner_left{
+   width: 49%;
+   Float: left;
+   display:inline;
+   }
+   
+.footer_inner_right{
+   width: 49%;
+   Float: right;
+   display:inline;
+   }
+
+.footer_row {
+   display: flex;
+   align-items: center;
+}
+ 
+.footer_column {
+    padding-top: 12px;
+   flex: 50%;
+}
+
+.footer_column_image {
+   flex: none;
+}
+
+.form-control {
+  font-size: 16px;
+  color: #ccc;
+  background-color: #1b1b1b;
+  background-image: none;
+  border: 1px solid #929292;
+}
+
+.input-group-addon {
+  color: #ccc;
+  background-color: #222;
+  border: 1px solid #444;
+}
+
+.modal-content {
+  background-color: #010101;
+  color: #ccc;
+}
+
+.modal-header {
+  border-bottom: 1px solid #339933;
+}
+
+
+.panel {
+    margin-bottom: 0px;
+}
+
+.panel-body {
+  background-color: #282727;
+  color: #9f9f9f;
+}
+
+.panel-footer {
+  background-color: #000;
+  border-top: 1px solid #444;
+  color: #ccc;
+}
+
+.panel-primary > .panel-heading {
+  background-color: #063221;
+}  
+
+.table{
+  border-color: #3c763d !important;
+}
+
+.table > tfoot > tr > td {
+  border-top: 1px solid #339933;
+}
+
+.table-bordered > tfoot > tr > td {
+  border: 1px dotted #339933;
+}
+
+.table-striped > tbody > tr:nth-child(odd) {
+  background-color: #262525;
+}
+
+
+

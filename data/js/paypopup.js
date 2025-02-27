@@ -1,4 +1,6 @@
 /**
+ * NO LONGER USED
+ * 
  * paypopup.js
  * Copyright (c) 2014 Andrew Toth
  *
@@ -11,7 +13,7 @@
 
 $(document).ready(function () {
     var SATOSHIS = 100000000,
-    FEE = SATOSHIS * .0001,
+    FEE = SATOSHIS * .0003,
     BTCUnits = 'AUR',
     BTCMultiplier = SATOSHIS,
     clickX,
