@@ -1,4 +1,4 @@
-# Auroracoin Browser Wallet Extension 2.1.2 - Provided by Auroracoin Project Team
+# Auroracoin Browser Wallet Extension 2.2.0 - Provided by Auroracoin101 Project Team
 
 Auroracoin wallet in the browser. Send and receive instantly on any web page.
 
@@ -29,6 +29,9 @@ Version 2.1.0 - Moved Blockchain Interface to Electrum(x) SPV servers. Begin eCo
 Version 2.1.1 - Improved Fallback
 
 Version 2.1.2 - Added electrum1.valhala.is
+
+Version 2.2.0 - Added Dark Mode, Fixed Currency Exchange, increased txfee to 0.0003 for large transactions (miners)
+
 
 ## Security
 
