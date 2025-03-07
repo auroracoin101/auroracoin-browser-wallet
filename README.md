@@ -17,13 +17,12 @@ Auroracoin wallet in your browser.
 |  2.0.6 | Various math fixes |
 |  2.0.7 | Using TransactionBuilder now per bitcore warning. Now under Auroracoin101 github repository |
 |  2.0.8 | Using chainz.cryptoid.info/aur as Blockchain Address Explorer |
-|  2.0.9 | Updated Logo to 2020 version. Also display Alternate Private Key using Auroracoin Desktop wallet format |
+|  2.0.9 | Updated Logo to 2020 version. Display Private Key/QR in 2 WIF formats |
 |  2.1.0 | Moved Blockchain Interface to Electrum(x) SPV servers. Begin eCoinCore Integration |
 |  2.1.1 | Improved Fallback |
 |  2.1.2 | Added Electrum server @ electrum1.valhala.is |
+|  2.1.3 | Insert OP_RETURN transaction support 
 |  2.2.0 | Added Dark Mode, Fixed Currency Exchange, increased txfee to 0.0003 for large transactions (miners) |
-
-Version 2.1.3 - ( In process ) - development on OP_RETURN functionality ( burn -> kaspa ) 
 
 ## Security
 

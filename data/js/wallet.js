@@ -131,13 +131,10 @@
             } else {
               privateKey = eckey.toWIF();
             }
-            //address = eckey.pub.getAddress().toString();
             address = eckey.getAddress();
             var outputscript = bitcoinjs_aur.address.toOutputScript(address);
             var sha = bitcoinjs_aur.crypto.sha256(outputscript);
-            scripthash = bitcoinjs_aur.Buffer.from(sha.reverse()).toString(
-              'hex'
-            );
+            scripthash = bitcoinjs_aur.Buffer.from(sha.reverse()).toString('hex');
             balance = 0;
             Promise.all([
               preferences.setAddress(address),
@@ -205,20 +202,12 @@
       }
     },
 
-    // Return WIF based on B0 byte 1, which is the WIF code used in the Desktop Wallet
+    // Return WIF with byte 1=B0(176), which is the WIF code used in the core wallet
+    // ie. "sweeping private key" now supports other browser wallet or core desktop wallets
     getWIFb0: function (wifKey) {
       try {
-        // var newKey = bitcoin.base58check.decode(wifKey);
         var newKey = bitcoinjs_aur.bs58check.decode(wifKey);
-        // newKey.privateKey[0] = 176;
-        //var newWif = bitcoin.base58check.encode(newKey);
-        var newWif = bitcoinjs_aur.bs58check.encode(
-          176,
-          newKey.privateKey,
-          true
-        );
-        //TEST
-        // var newKeyString = newWif.toString(CryptoJS.enc.Utf8);
+        var newWif = bitcoinjs_aur.bs58check.encode(176,newKey.privateKey,true);
       } catch (e) {
         return 'Error creating Alternate WIF';
       }
@@ -324,15 +313,12 @@
               //prepare a key to sign the tx
               eckey = bitcoinjs_aur.ECPair.fromWIF(decryptedPrivateKey),
               // Total cost is amount plus fee
-              // fee = 0;
               txValue = Number(amount) + Number(fee),
               availableValue = 0,
               inputAmount = Number(0.0);
-            // fee = 0;
             // Gather enough inputs so that their value is greater than or equal to the total cost
             for (var i = 0; i < inputs.length; i++) {
               selectedOuts.push(inputs[i]);
-              //inputAmount = parseInt((inputs[i].amount * 100000000).toFixed(0), 10  );
               inputAmount = Number(inputs[i].value);
 
               // TODO - do not use fixed fee, keep track of selectedOuts for fee/byte
@@ -350,24 +336,20 @@
               }
               txb.addOutput(sendAddress, amount);
 
-              //const messageHex = "6b617370613a71726175686633746e6e67643579656e70786c6873727a6a66643470703736747572687965347665796339307033737030757864356438756a74713361";
-              // The Kaspa address as a string
-              const kaspaddr = "kaspa:qrauh...coming.soon.proof.of.burn...tq3a";
+              if (false) {
+                  // Adding OP_RETURN to transaction
+                  const op_return = "";
 
-              // Convert the string into a hexadecimal representation using CryptoJS
-              const messageHex = CryptoJS.enc.Hex.stringify(CryptoJS.enc.Utf8.parse(kaspaddr));
+                  // Convert the string into a hexadecimal representation using CryptoJS
+                  const messageHex = CryptoJS.enc.Hex.stringify(CryptoJS.enc.Utf8.parse(kaspaddr));
 
-              // Convert the string to its hexadecimal representation
-              //const messageHex = Buffer.from(kaspaddr, "utf8").toString("hex");
-              console.log(messageHex);
-
-              txb.addOutput(bitcoinjs_aur.script.compile(
-                [
-                  bitcoinjs_aur.opcodes.OP_RETURN,
-                  bitcoinjs_aur.Buffer.from(messageHex, "hex")
-                ]), 0
-              ); // The amount is zero for OP_RETURN
-
+                  txb.addOutput(bitcoinjs_aur.script.compile(
+                    [
+                      bitcoinjs_aur.opcodes.OP_RETURN,
+                      bitcoinjs_aur.Buffer.from(messageHex, "hex")
+                    ]), 0
+                  ); // The amount is zero for OP_RETURN
+              };
 
               changeValue = availableValue - txValue;
               if (changeValue > 0) {
