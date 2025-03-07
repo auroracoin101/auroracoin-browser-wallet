@@ -1,11 +1,15 @@
-.container {
-    margin-left: 0px;
-    width: 360px;
-}
 
 a:hover {
     color: #428bca;
     text-decoration: none !important;
+}
+
+audio,
+canvas,
+progress,
+video {
+  opacity: 0.8;
+  border: 10px solid white;
 }
 
 body .modal-dialog {
@@ -27,8 +31,24 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: 0;
 }
 
+#cover {
+    background: url("ajax-loader.gif") no-repeat scroll center center rgba(255,255,255,0.5);
+    z-index: 2147483647;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
 #newPassword{margin-bottom: 10px;}
 
+#sendConfirmationText,
+#privateKeyText {
+    word-wrap: break-word;
+}
+
+#privateKey2Text {
+       word-wrap: break-word;
+}
 #privateKeyQRCode {
     margin-left: 77px;
 }
@@ -43,23 +63,18 @@ input[type="number"]::-webkit-outer-spin-button {
 
 #settingsButton {
     margin-left: 219px;
+    background: #1b5952;
 }
 
 #settingsMenu {
     margin-left: 76px;
+    background-color: #242f2f;
 }
 
 .no-padding {
     margin: 0px;
 }
 
-#sendConfirmationText,
-#privateKeyText {
-    word-wrap: break-word;
-}
-
-#privateKey2Text {
-       word-wrap: break-word;
    }
 
 .btn.active.focus {
@@ -74,6 +89,13 @@ input[type="number"]::-webkit-outer-spin-button {
 .panel {
     margin-bottom: 0px;
 }
+
+.container {
+	background-color: #eee;
+	margin-left: 0px;
+    width: 360px;
+}
+
 
 .footer_inner_left{
    width: 49%;
@@ -93,6 +115,7 @@ input[type="number"]::-webkit-outer-spin-button {
  }
  
  .footer_column {
+   padding-top: 12px;
    flex: 50%;
  }
 
@@ -100,10 +123,3 @@ input[type="number"]::-webkit-outer-spin-button {
    flex: none;
  }
 
-#cover {
-    background: url("ajax-loader.gif") no-repeat scroll center center rgba(255,255,255,0.5);
-    z-index: 2147483647;
-    position: absolute;
-    height: 100%;
-    width: 100%;
-}
