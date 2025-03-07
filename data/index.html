@@ -4,7 +4,7 @@
    <title>Auroracoin Browser Wallet Extension</title>
    <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
    <link href="css/bootstrap.css" rel="stylesheet">
-   <link href="css/index.css" rel="stylesheet">
+   <!-- see index.js for dynamic load link href="css/index.css" rel="stylesheet"-->
    <script src="js/libs/promise.min.js" type="text/javascript"></script>
    <script src="js/libs/cryptojs.min.js" type="text/javascript"></script>
    <script src="js/libs/bitcoinjs-aur.js" type="text/javascript"></script>
@@ -81,7 +81,7 @@
                <strong>Balance: <span id="balance">0 AUR</span></strong>
             </div>
             <div class="footer_column_image" align="center">
-               <img src="auroracoin48.png">
+               <img id="logo" src="auroracoin48.png" alt="Auroracoin logo">
                <br>v<span id="version2"></span>
             </div>
             <!--  

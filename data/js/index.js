@@ -8,6 +8,64 @@
  * Controls index.html, the main wallet Chrome popover/Firefox panel
  */
 
+function loadStyleSheet(href) {
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = href;
+  document.head.appendChild(link);
+}
+
+(async () => {
+  const themeToggleHandler = async () => {
+    try {
+      // Get the current theme
+      const currentTheme = await preferences.getTheme();
+      const newTheme = currentTheme === 'DARK' ? 'LIGHT' : 'DARK';
+
+      // Save the new theme preference
+      await preferences.setTheme(newTheme);
+
+      // Remove only the theme-related stylesheet
+      const themeStylesheets = document.querySelectorAll('link[rel="stylesheet"]');
+      themeStylesheets.forEach(sheet => {
+        if (sheet.href.includes('index-dark.css') || sheet.href.includes('index-light.css')) {
+          sheet.parentNode.removeChild(sheet);
+        }
+      });
+
+      // Load the new theme's stylesheet
+      loadStyleSheet(newTheme === 'DARK' ? 'css/index-dark.css' : 'css/index-light.css');
+
+      console.log(`Theme switched to: ${newTheme}`);
+    } catch (err) {
+      console.error('Error toggling theme:', err);
+    }
+  };
+
+  try {
+    // Initial theme setup
+    const theme = await preferences.getTheme();
+    console.log('Theme preference:', theme);
+
+    loadStyleSheet(theme === 'DARK' ? 'css/index-dark.css' : 'css/index-light.css');
+  } catch (err) {
+    console.error('Error loading theme preference:', err);
+    // Fallback to a default theme
+    loadStyleSheet('css/index-light.css');
+  }
+
+  // Attach the event listener to the logo
+  document.getElementById('logo').addEventListener('click', themeToggleHandler);
+})();
+
+// if (true) {
+//   loadStyleSheet('css/index-dark.css');
+// } else {
+//   loadStyleSheet('css/index-light.css');
+// }
+
+// loadStyleSheet('css/index.css');
+
 $(document).ready(function () {
   // Setup the wallet, page values and callbacks
 
@@ -40,24 +98,12 @@ $(document).ready(function () {
 
   // IIFE top-level await - ensures electrumInit resolves before setupWallet
   (async () => {
-    //  var host = 'lenoir.ecoincore.com',
-    //    port = 12345,
-    //    type = 'wss';
     try {
-      // #11 - placing setupWallet here works, but it relies on electrum to get balance
-      // 
-      //setupWallet();
       const data = await electrumxManager.electrumInit();
-      //console.log('Initialize Electrum', data);
-      // chatgpt:  the following line ideally would run even if electrumInit fails
-      // setupWallet();
     } catch (err) {
       console.error('electrumInit');
       console.error(err);
     } finally {
-      // #11 - Ensure setupWallet runs even if ElectrumInit fails
-      // but setupWallet currently not running when electrumInit fails above it seems
-      // only when in debugger mode and stepping through issues does it run ?  ( exceptions ? )
       setupWallet();
     }
   })();
@@ -123,9 +169,7 @@ $(document).ready(function () {
 
   /*   *  Send AUR    */
   $('#sendButton').click(function () {
-    // val = Math.floor(Number($('#amount').val() * BTCMultiplier));
     val = Math.round(Number($('#amount').val() * BTCMultiplier));
-    // val = Math.floor(Number($('#amount').val() * 1e8));
     address = $('#sendAddress').val();
     var balance = wallet.getBalance();
     var validAmount = true;

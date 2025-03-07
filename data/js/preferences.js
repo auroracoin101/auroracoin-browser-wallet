@@ -17,7 +17,8 @@
     EXCHANGE_RATE = 'wallet.exchange_rate',
     BTC_UNITS = 'wallet.btc_units',
     CURRENCY = 'wallet.currency',
-    SITE = 'http://insight.auroracoin.is',
+    SITE = 'https://chainz.cryptoid.info/aur/api.dws?q=addressinfo&a=%address%',
+    THEME = 'wallet.theme'
     preferences = function () {};
 
   function sync() {
@@ -33,6 +34,7 @@
         object[EXCHANGE_RATE] = 0;
         object[BTC_UNITS] = 'AUR';
         object[CURRENCY] = 'ISK';
+        object[THEME] = 'DARK';
         chrome.storage.sync.get(object, resolve);
       } else {
         util
@@ -47,6 +49,7 @@
               message[EXCHANGE_RATE] = 0;
               message[BTC_UNITS] = 'AUR';
               message[CURRENCY] = 'ISK';
+              message[THEME] = 'DARK';
               return util.message('save', message);
             } else {
               return message;
@@ -121,6 +124,11 @@
       return set(CURRENCY, currency).then(function () {
         currencyManager.updateExchangeRate();
       });
+    },
+
+    getTheme: get(THEME),
+    setTheme: function (theme) {
+      return set(THEME, theme);
     },
 
     getSite: function () {
