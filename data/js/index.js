@@ -25,7 +25,7 @@ function loadStyleSheet(href) {
       // Save the new theme preference
       await preferences.setTheme(newTheme);
 
-      // Remove only the theme-related stylesheet
+      // Remove relevant theme-related stylesheet
       const themeStylesheets = document.querySelectorAll('link[rel="stylesheet"]');
       themeStylesheets.forEach(sheet => {
         if (sheet.href.includes('index-dark.css') || sheet.href.includes('index-light.css')) {
@@ -49,22 +49,14 @@ function loadStyleSheet(href) {
 
     loadStyleSheet(theme === 'DARK' ? 'css/index-dark.css' : 'css/index-light.css');
   } catch (err) {
-    console.error('Error loading theme preference:', err);
-    // Fallback to a default theme
-    loadStyleSheet('css/index-light.css');
+      console.error('Error loading theme preference:', err);
+     // Fallback to a default theme
+      loadStyleSheet('css/index-light.css');
   }
 
   // Attach the event listener to the logo
   document.getElementById('logo').addEventListener('click', themeToggleHandler);
 })();
-
-// if (true) {
-//   loadStyleSheet('css/index-dark.css');
-// } else {
-//   loadStyleSheet('css/index-light.css');
-// }
-
-// loadStyleSheet('css/index.css');
 
 $(document).ready(function () {
   // Setup the wallet, page values and callbacks
