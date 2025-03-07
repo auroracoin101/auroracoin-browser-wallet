@@ -26,6 +26,12 @@ r-spin-button {
   margin: 0;
 }
 
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 #cover {
     background: url("ajax-loader.gif") no-repeat scroll center center rgba(255,255,255,0.5);
     z-index: 2147483647;

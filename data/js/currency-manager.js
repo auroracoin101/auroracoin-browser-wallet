@@ -12,106 +12,106 @@
 (function (window) {
     var currencyInstance;
 
-   var currencyManager = function () {};
+    var currencyManager = function () {};
     currencyManager.prototype = {
-        updateExchangeRate: function () {
-            var tickresult 
-            // var lcurr = function () { preferences.getCurrency(); };
-            
+        updateExchangeRate: async function () {
+            try {
+                // Get the AUR price from API1
+                const aurResponse = await util.getJSON('https://api-two.ewm-cx.net/api/v1/price/getPriceByCoin?symbol=AUR');
+                if (!aurResponse || !aurResponse.success) throw new Error("Failed to fetch AUR price");
 
-            util.getJSON('https://min-api.cryptocompare.com/data/price?fsym=AUR&tsyms=AUD,BRL,CAD,CHF,CNY,ISK,EUR,GBP,ILS,JPY,NOK,NZD,PLN,RUB,SEK,SGD,USD,ZAR'
-                            ).then(function (response){
-                    tickresult = response ;
-                    return preferences.getCurrency().then ( function (currency) {
-                                    switch (currency) {
-                    case 'AUD': return ( preferences.setExchangeRate(response.AUD)); 
-                    case 'CAD': return ( preferences.setExchangeRate(response.CAD));
-                    case 'NZD': return ( preferences.setExchangeRate(response.NZD));
-                    case 'SGD': return ( preferences.setExchangeRate(response.SGD));
-                    case 'USD': return ( preferences.setExchangeRate(response.USD));
-                    case 'BRL': return ( preferences.setExchangeRate(response.BRL));
-                    case 'CHF': return ( preferences.setExchangeRate(response.CHF));
-                    case 'CNY': return ( preferences.setExchangeRate(response.CNY));
-                    case 'JPY': return ( preferences.setExchangeRate(response.JPY));                    
-                    case 'EUR': return ( preferences.setExchangeRate(response.EUR));
-                    case 'GBP': return ( preferences.setExchangeRate(response.GBP));
-                    case 'ILS': return ( preferences.setExchangeRate(response.ILS));
-                    case 'NOK': return ( preferences.setExchangeRate(response.NOK));
-                    case 'SEK': return ( preferences.setExchangeRate(response.SEK));                    
-                    case 'ISK': return ( preferences.setExchangeRate(response.ISK));
-                    case 'PLN': return ( preferences.setExchangeRate(response.PLN));
-                    case 'RUB': return ( preferences.setExchangeRate(response.RUB));
-                    case 'ZAR': return ( preferences.setExchangeRate(response.ZAR));
+                // Get the user's preferred currency
+                const currency = await preferences.getCurrency();
+                
+                // Get BTC price from API2 (Blockchain.info)
+                const currencyTicker = await util.getJSON('https://blockchain.info/ticker');
+                
+                if (currency != 'BTC') 
+                    if (!currencyTicker || !currencyTicker[currency]) throw new Error("Failed to fetch BTC price");
 
-                    default: return(preferences.setExchangeRate( 0.00 ));
-                    }
-                    } );   
-                    //     preferences.setExchangeRate(response.currency);             
-                    // })
-            });
-        },
+                let exchangeRate = 0;
 
-      
-        getSymbol: function () {
-            return preferences.getCurrency().then(function (currency) {
                 switch (currency) {
-                    case 'AUD':
-                    case 'CAD':
-                    case 'NZD':
-                    case 'SGD':
-                    case 'USD':
-                        return(['$ ', 'before']);
-                    case 'BRL':
-                        return(['R$ ', 'before']);
-                    case 'CHF':
-                        return([' Fr.', 'after']);
-                    case 'CNY':
-                    case 'JPY':
-                        return(['¥ ', 'before']);
-                    case 'EUR':
-                        return(['€ ', 'before']);
-                    case 'GBP':
-                        return(['£ ', 'before']);
-                    case 'ILS':
-                        return(['₪ ', 'before']);
-                    case 'NOK':
-                        return([' kr', 'after']);
-                    case 'SEK':
-                        return([' kr', 'after']);
-                    case 'ISK':
-                        return([' ISK', 'after']);
-                    case 'PLN':
-                        return([' zł', 'after']);
-                    case 'RUB':
-                        return([' RUB', 'after']);
-                    case 'ZAR':
-                        return([' R', 'after']);
-                    default:
-                        return(['$ ', 'before']);
+                    case 'BTC': 
+                        exchangeRate = aurResponse.data.priceBTC; 
+                        break;
+                    case 'USD': 
+                        exchangeRate = aurResponse.data.priceUSD; 
+                        break;
+                    default: 
+                        // Use currencyTicker to get the fiat price of BTC and calculate the AUR price
+                        const btcToFiat = currencyTicker[currency].last; // Get Bitcoin price in selected currency
+                        exchangeRate = aurResponse.data.priceBTC * btcToFiat;
+                        console.log(`BTC to ${currency}: ${btcToFiat}, AUR to ${currency}: ${exchangeRate}`);
+                        break;
                 }
-            });
+
+                // Save the exchange rate
+                await preferences.setExchangeRate(exchangeRate);
+                console.log(`Exchange rate updated: 1 AUR = ${exchangeRate} ${currency}`);
+
+            } catch (error) {
+                console.error("Error updating exchange rate:", error);
+                await preferences.setExchangeRate(0.00);
+            }
         },
+
+        getSymbol: async function () {
+            const currency = await preferences.getCurrency();
+
+            // Currency symbol & placement map with decimal precision
+            const currencyFormats = {
+                'AUD': { symbol: '$ ', placement: 'before', decimals: 2 },
+                'CAD': { symbol: '$ ', placement: 'before', decimals: 2 },
+                'NZD': { symbol: '$ ', placement: 'before', decimals: 2 },
+                'SGD': { symbol: '$ ', placement: 'before', decimals: 2 },
+                'USD': { symbol: '$ ', placement: 'before', decimals: 2 },
+                'BTC': { symbol: '\u20BF ', placement: 'before', decimals: 8 },
+                'CHF': { symbol: ' Fr.', placement: 'after', decimals: 2 },
+                'CNY': { symbol: '¥ ', placement: 'before', decimals: 2 },
+                'JPY': { symbol: '¥ ', placement: 'before', decimals: 0 },
+                'EUR': { symbol: '€ ', placement: 'before', decimals: 2 },
+                'GBP': { symbol: '£ ', placement: 'before', decimals: 2 },
+                'SEK': { symbol: ' kr', placement: 'after', decimals: 2 },
+                'ISK': { symbol: ' ISK', placement: 'after', decimals: 0 }, // ISK has no decimals
+                'PLN': { symbol: ' zł', placement: 'after', decimals: 2 },
+                'RUB': { symbol: ' RUB', placement: 'after', decimals: 2 },
+                'DEFAULT': { symbol: '$ ', placement: 'before', decimals: 2 }
+            };
+
+            return currencyFormats[currency] || currencyFormats['DEFAULT'];
+        },
+
+
 
         getAvailableCurrencies: function () {
-            return ['AUD', 'BRL', 'CAD', 'CHF', 'CNY', 'ISK', 'EUR', 'GBP', 'ILS', 'JPY', 'NOK', 'NZD', 'PLN', 'RUB', 'SEK', 'SGD', 'USD', 'ZAR'];
+            return ['BTC', 'ISK', 'CAD', 'EUR', 'GBP', 'JPY', 'USD', 'CHF', 'CNY', 'AUD', 'NZD', 'PLN', 'RUB', 'SEK', 'SGD']; 
         },
 
-        formatAmount: function (value) {
-            return Promise.all([preferences.getExchangeRate(), this.getSymbol()]).then(function (values) {
-                var rate = values[0],
-                    symbol = values[1][0],
-                    beforeOrAfter = values[1][1],
-                    SATOSHIS = 100000000,
-                    text = (value / SATOSHIS * rate).formatMoney(2);
-                if (beforeOrAfter === 'before') {
-                    text = symbol + text;
-                } else {
-                    text += symbol;
-                }
+        formatAmount: async function (value) {
+            try {
+                // Fetch necessary values asynchronously
+                const rate = await preferences.getExchangeRate();
+                const currencyFormat = await this.getSymbol(); // Now returns an object
+                // const currency = await preferences.getCurrency();
+
+                const SATOSHIS = 100000000;
+                let convAmount = (value * rate) / SATOSHIS;
+
+                // Use the decimalPlaces property from the returned object
+                let text = convAmount.toFixed(currencyFormat.decimals);
+
+                // Add the symbol before or after
+                text = currencyFormat.placement === 'before' 
+                    ? `${currencyFormat.symbol}${text}` 
+                    : `${text}${currencyFormat.symbol}`;
+
                 return text;
-            });
+            } catch (err) {
+                console.error('Error formatting amount:', err);
+                return 'N/A';
+            }
         }
-    };
 
     Number.prototype.formatMoney = function(c, d, t){
         var n = this,

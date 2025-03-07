@@ -16,6 +16,17 @@ body .modal-dialog {
 
 body::-webkit-scrollbar{display:none !important;}
 
+r-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 #newPassword{margin-bottom: 10px;}
 
 #privateKeyQRCode {

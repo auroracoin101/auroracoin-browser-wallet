@@ -72,7 +72,7 @@ $(document).ready(function () {
   var val = '',
     address = '',
     SATOSHIS = 100000000,
-    FEE = SATOSHIS * 0.0001,
+    FEE = SATOSHIS * 0.0003,
     BTCUnits = 'AUR',
     BTCMultiplier = SATOSHIS;
 
@@ -110,10 +110,10 @@ $(document).ready(function () {
 
   $('#amount').on('keyup change', function () {
     val = Math.round(Number($(this).val() * BTCMultiplier));
-    // val = Number($(this).val()) * 1e8 ;
-    // val = Math.floor( val ) ;
+
     if (val > 0) {
       currencyManager.formatAmount(val).then(function (formattedMoney) {
+        // console.log(formattedMoney.toString());
         var text = 'Amount: ' + formattedMoney;
         $('#amountLabel').text(text);
       });
@@ -206,13 +206,15 @@ $(document).ready(function () {
       if (wallet.isEncrypted()) {
         currencyManager.formatAmount(val).then(function (formattedMoney) {
           var text =
-            'Are you sure you want to send<br />' +
+            // 'Are you sure you want to send<br />' +
+            'Are you sure you want to send ' +
             val / BTCMultiplier +
             ' ' +
             BTCUnits +
             ' (<strong>' +
             formattedMoney +
-            '</strong>)<br />to ' +
+            //'</strong>) to<br />' +
+            '</strong>) to ' +
             address +
             ' ?';
           $('#sendConfirmationText').html(text);
@@ -257,7 +259,10 @@ $(document).ready(function () {
           txid +
           '</a><br>(Transaction should be included in next block or two.)</span>';
 
+        console.log(text);
+
         text = $.parseHTML(text);
+        console.log(text);
         $('#successAlertLabel').append(text);
         $('#successAlert').slideDown();
         $('#sendConfirmationModal').modal('hide');
@@ -363,21 +368,56 @@ $(document).ready(function () {
   $('#setCurrency').click(function () {
     preferences.getCurrency().then(function (currency) {
       var currencies = currencyManager.getAvailableCurrencies();
+
+      var tableBody = '';
+      var columnsPerRow = 3; // Number of items per row
+
+      for (var i = 0; i < currencies.length; i += columnsPerRow) {
+          tableBody += '<tr>';
+
+          for (var j = 0; j < columnsPerRow; j++) {
+              var currencyIndex = i + j;
+              if (currencyIndex < currencies.length) {
+                  var curr = currencies[currencyIndex];
+
+                  tableBody +=
+                      '<td><div class="radio no-padding"><label><input type="radio" name="currency" value="' +
+                      curr +
+                      '"';
+
+                  if (curr === currency) {
+                      tableBody += ' checked';
+                  }
+
+                  tableBody += '>' + curr + '</label></div></td>';
+              } else {
+                  tableBody += '<td></td>'; // Fill empty slots if last row is incomplete
+              }
+          }
+
+          tableBody += '</tr>';
+      }
+      /*
+      var currencies = currencyManager.getAvailableCurrencies();
+      console.log("number of currencies:  ",currencies.length);
       var tableBody = '';
       for (var i = 0; i < currencies.length / 3; i++) {
         tableBody += '<tr>';
+        console.log(tableBody);
         for (var j = i; j <= i + 12; j += 6) {
           tableBody +=
             '<td><div class="radio no-padding"><label><input type="radio" name="' +
             currencies[j] +
             '"';
+            console.log(j,currencies[j]);
           if (currencies[j] === currency) {
             tableBody += ' checked';
           }
           tableBody += '>' + currencies[j] + '</label></div></td>';
         }
         tableBody += '</tr>';
-      }
+      }*/
+
       $('#tableBody').html(tableBody);
       $('#setCurrencyModal').modal().show();
       $('.radio').click(function () {
