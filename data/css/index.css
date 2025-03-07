@@ -30,10 +30,12 @@ body::-webkit-scrollbar{display:none !important;}
 
 #settingsButton {
     margin-left: 219px;
+    background: #1b5952;
 }
 
 #settingsMenu {
     margin-left: 76px;
+    background-color: #242f2f;
 }
 
 .no-padding {
@@ -71,6 +73,7 @@ body::-webkit-scrollbar{display:none !important;}
  }
  
  .footer_column {
+    padding-top: 12px;
    flex: 50%;
  }
 
