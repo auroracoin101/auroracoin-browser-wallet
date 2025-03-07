@@ -1,34 +1,27 @@
-# Auroracoin Browser Wallet Extension 2.1.2 - Provided by Auroracoin Project Team
+![Auroracoin Official Logo.](/data/auroracoin128.png)
+# Auroracoin Browser Wallet Extension 2.2.0
 
-Auroracoin wallet in the browser. Send and receive instantly on any web page.
+### Provided by Auroracoin101 Project Team
+Auroracoin wallet in your browser.  
 
-Version 1.3 - Updated for Multi-Algo
-
-Version 2.0 - Updated to use Insight exclusively for blockchain access and tx send
-
-Version 2.0.1 - Removed incompatible API, exchange rates currently unavailable
-
-Version 2.0.2 - Fixed API calls, exchange rates and currencies re-enabled
-
-Version 2.0.3 - Internal Changes related to Github management.
-
-Version 2.0.4 - Removed BitCoinAverage API, using CryptoCompare
-
-Version 2.0.5 - Removed Context Menu Features and Related Required Permissions
-
-Version 2.0.6 - Various math fixes
-
-Version 2.0.7 - Using TransactionBuilder now per bitcore warning. Now under Auroracoin101 github repo.
-
-Version 2.0.8 - Using chainz.cryptoid.info/aur as Blockchain Address Explorer
-
-Version 2.0.9 - Updated Logo to 2020 version. Also display Alternate Private Key using Auroracoin Desktop wallet format.
-
-Version 2.1.0 - Moved Blockchain Interface to Electrum(x) SPV servers. Begin eCoinCore Integration.
-
-Version 2.1.1 - Improved Fallback
-
-Version 2.1.2 - Added electrum1.valhala.is
+## Releases
+| Version    | Description |
+|------------------ |------------ |
+|  1.3.0 | Updated for Multi-Algo |
+|  2.0.0 | Updated to use Insight exclusively for blockchain access and tx send |
+|  2.0.1 | Removed incompatible API, exchange rates currently unavailable |
+|  2.0.2 | Fixed API calls, exchange rates and currencies re-enabled |
+|  2.0.3 | Internal Changes related to Github management |
+|  2.0.4 | Removed BitCoinAverage API, using CryptoCompare |
+|  2.0.5 | Removed Context Menu Features and Related Required Permissions |
+|  2.0.6 | Various math fixes |
+|  2.0.7 | Using TransactionBuilder now per bitcore warning. Now under Auroracoin101 github repository |
+|  2.0.8 | Using chainz.cryptoid.info/aur as Blockchain Address Explorer |
+|  2.0.9 | Updated Logo to 2020 version. Also display Alternate Private Key using Auroracoin Desktop wallet format |
+|  2.1.0 | Moved Blockchain Interface to Electrum(x) SPV servers. Begin eCoinCore Integration |
+|  2.1.1 | Improved Fallback |
+|  2.1.2 | Added Electrum server @ electrum1.valhala.is |
+|  2.2.0 | Added Dark Mode, Fixed Currency Exchange, increased txfee to 0.0003 for large transactions (miners) |
 
 Version 2.1.3 - ( In process ) - development on OP_RETURN functionality ( burn -> kaspa ) 
 

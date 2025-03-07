@@ -8,13 +8,71 @@
  * Controls index.html, the main wallet Chrome popover/Firefox panel
  */
 
+function loadStyleSheet(href) {
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = href;
+  document.head.appendChild(link);
+}
+
+(async () => {
+  const themeToggleHandler = async () => {
+    try {
+      // Get the current theme
+      const currentTheme = await preferences.getTheme();
+      const newTheme = currentTheme === 'DARK' ? 'LIGHT' : 'DARK';
+
+      // Save the new theme preference
+      await preferences.setTheme(newTheme);
+
+      // Remove only the theme-related stylesheet
+      const themeStylesheets = document.querySelectorAll('link[rel="stylesheet"]');
+      themeStylesheets.forEach(sheet => {
+        if (sheet.href.includes('index-dark.css') || sheet.href.includes('index-light.css')) {
+          sheet.parentNode.removeChild(sheet);
+        }
+      });
+
+      // Load the new theme's stylesheet
+      loadStyleSheet(newTheme === 'DARK' ? 'css/index-dark.css' : 'css/index-light.css');
+
+      console.log(`Theme switched to: ${newTheme}`);
+    } catch (err) {
+      console.error('Error toggling theme:', err);
+    }
+  };
+
+  try {
+    // Initial theme setup
+    const theme = await preferences.getTheme();
+    console.log('Theme preference:', theme);
+
+    loadStyleSheet(theme === 'DARK' ? 'css/index-dark.css' : 'css/index-light.css');
+  } catch (err) {
+    console.error('Error loading theme preference:', err);
+    // Fallback to a default theme
+    loadStyleSheet('css/index-light.css');
+  }
+
+  // Attach the event listener to the logo
+  document.getElementById('logo').addEventListener('click', themeToggleHandler);
+})();
+
+// if (true) {
+//   loadStyleSheet('css/index-dark.css');
+// } else {
+//   loadStyleSheet('css/index-light.css');
+// }
+
+// loadStyleSheet('css/index.css');
+
 $(document).ready(function () {
   // Setup the wallet, page values and callbacks
 
   var val = '',
     address = '',
     SATOSHIS = 100000000,
-    FEE = SATOSHIS * 0.0001,
+    FEE = SATOSHIS * 0.0003,
     BTCUnits = 'AUR',
     BTCMultiplier = SATOSHIS;
 
@@ -40,34 +98,22 @@ $(document).ready(function () {
 
   // IIFE top-level await - ensures electrumInit resolves before setupWallet
   (async () => {
-    //  var host = 'lenoir.ecoincore.com',
-    //    port = 12345,
-    //    type = 'wss';
     try {
-      // #11 - placing setupWallet here works, but it relies on electrum to get balance
-      // 
-      //setupWallet();
       const data = await electrumxManager.electrumInit();
-      //console.log('Initialize Electrum', data);
-      // chatgpt:  the following line ideally would run even if electrumInit fails
-      // setupWallet();
     } catch (err) {
       console.error('electrumInit');
       console.error(err);
     } finally {
-      // #11 - Ensure setupWallet runs even if ElectrumInit fails
-      // but setupWallet currently not running when electrumInit fails above it seems
-      // only when in debugger mode and stepping through issues does it run ?  ( exceptions ? )
       setupWallet();
     }
   })();
 
   $('#amount').on('keyup change', function () {
     val = Math.round(Number($(this).val() * BTCMultiplier));
-    // val = Number($(this).val()) * 1e8 ;
-    // val = Math.floor( val ) ;
+
     if (val > 0) {
       currencyManager.formatAmount(val).then(function (formattedMoney) {
+        // console.log(formattedMoney.toString());
         var text = 'Amount: ' + formattedMoney;
         $('#amountLabel').text(text);
       });
@@ -123,9 +169,7 @@ $(document).ready(function () {
 
   /*   *  Send AUR    */
   $('#sendButton').click(function () {
-    // val = Math.floor(Number($('#amount').val() * BTCMultiplier));
     val = Math.round(Number($('#amount').val() * BTCMultiplier));
-    // val = Math.floor(Number($('#amount').val() * 1e8));
     address = $('#sendAddress').val();
     var balance = wallet.getBalance();
     var validAmount = true;
@@ -162,13 +206,15 @@ $(document).ready(function () {
       if (wallet.isEncrypted()) {
         currencyManager.formatAmount(val).then(function (formattedMoney) {
           var text =
-            'Are you sure you want to send<br />' +
+            // 'Are you sure you want to send<br />' +
+            'Are you sure you want to send ' +
             val / BTCMultiplier +
             ' ' +
             BTCUnits +
             ' (<strong>' +
             formattedMoney +
-            '</strong>)<br />to ' +
+            //'</strong>) to<br />' +
+            '</strong>) to ' +
             address +
             ' ?';
           $('#sendConfirmationText').html(text);
@@ -213,7 +259,10 @@ $(document).ready(function () {
           txid +
           '</a><br>(Transaction should be included in next block or two.)</span>';
 
+        console.log(text);
+
         text = $.parseHTML(text);
+        console.log(text);
         $('#successAlertLabel').append(text);
         $('#successAlert').slideDown();
         $('#sendConfirmationModal').modal('hide');
@@ -319,21 +368,56 @@ $(document).ready(function () {
   $('#setCurrency').click(function () {
     preferences.getCurrency().then(function (currency) {
       var currencies = currencyManager.getAvailableCurrencies();
+
+      var tableBody = '';
+      var columnsPerRow = 3; // Number of items per row
+
+      for (var i = 0; i < currencies.length; i += columnsPerRow) {
+          tableBody += '<tr>';
+
+          for (var j = 0; j < columnsPerRow; j++) {
+              var currencyIndex = i + j;
+              if (currencyIndex < currencies.length) {
+                  var curr = currencies[currencyIndex];
+
+                  tableBody +=
+                      '<td><div class="radio no-padding"><label><input type="radio" name="currency" value="' +
+                      curr +
+                      '"';
+
+                  if (curr === currency) {
+                      tableBody += ' checked';
+                  }
+
+                  tableBody += '>' + curr + '</label></div></td>';
+              } else {
+                  tableBody += '<td></td>'; // Fill empty slots if last row is incomplete
+              }
+          }
+
+          tableBody += '</tr>';
+      }
+      /*
+      var currencies = currencyManager.getAvailableCurrencies();
+      console.log("number of currencies:  ",currencies.length);
       var tableBody = '';
       for (var i = 0; i < currencies.length / 3; i++) {
         tableBody += '<tr>';
+        console.log(tableBody);
         for (var j = i; j <= i + 12; j += 6) {
           tableBody +=
             '<td><div class="radio no-padding"><label><input type="radio" name="' +
             currencies[j] +
             '"';
+            console.log(j,currencies[j]);
           if (currencies[j] === currency) {
             tableBody += ' checked';
           }
           tableBody += '>' + currencies[j] + '</label></div></td>';
         }
         tableBody += '</tr>';
-      }
+      }*/
+
       $('#tableBody').html(tableBody);
       $('#setCurrencyModal').modal().show();
       $('.radio').click(function () {
