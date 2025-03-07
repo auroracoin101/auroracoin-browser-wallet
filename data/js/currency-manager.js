@@ -82,8 +82,6 @@
             return currencyFormats[currency] || currencyFormats['DEFAULT'];
         },
 
-
-
         getAvailableCurrencies: function () {
             return ['BTC', 'ISK', 'CAD', 'EUR', 'GBP', 'JPY', 'USD', 'CHF', 'CNY', 'AUD', 'NZD', 'PLN', 'RUB', 'SEK', 'SGD']; 
         },
@@ -112,6 +110,7 @@
                 return 'N/A';
             }
         }
+    };
 
     Number.prototype.formatMoney = function(c, d, t){
         var n = this,
