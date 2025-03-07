@@ -63,12 +63,12 @@ input[type="number"]::-webkit-outer-spin-button {
 
 #settingsButton {
     margin-left: 219px;
-    background: #1b5952;
+    /* background: #1b5952; */
 }
 
 #settingsMenu {
     margin-left: 76px;
-    background-color: #242f2f;
+    /* background-color: #242f2f; */
 }
 
 .no-padding {
