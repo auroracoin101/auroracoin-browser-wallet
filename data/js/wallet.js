@@ -47,7 +47,6 @@
       console.log('wallet.js.generateAddress');
       return new Promise(function (resolve, reject) {
         if (ret.validatePassword(password)) {
-          // var eckey = bitcoin.ECKey.makeRandom();
           var eckey = bitcoinjs_aur.ECPair.makeRandom();
           if (isEncrypted) {
             if (typeof chrome !== 'undefined') {
@@ -62,7 +61,6 @@
           } else {
             privateKey = eckey.toWIF();
           }
-          //address = eckey.pub.getAddress().toString();
           address = eckey.getAddress();
           var outputscript = bitcoinjs_aur.address.toOutputScript(address);
           var sha = bitcoinjs_aur.crypto.sha256(outputscript);
@@ -113,7 +111,6 @@
         if (ret.validatePassword(password)) {
           try {
             //create an ECKey from private key
-            //var eckey = new bitcoin.ECKey.fromWIF(_privateKey);
             var eckey = new bitcoinjs_aur.ECPair.fromWIF(
               _privateKey,
               bitcoinjs_aur.networks.auroracoin
@@ -300,7 +297,7 @@
     });
   };
 
-  // Send bitcoin from the wallet to another address
+  // Send auroracoin from the wallet to another address
   wallet.prototype.send = function (sendAddress, amount, fee, password) {
     return new Promise(function (resolve, reject) {
       var decryptedPrivateKey = ret.getDecryptedPrivateKey(password);
