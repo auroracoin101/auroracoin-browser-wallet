@@ -19,25 +19,25 @@
         rect = null;
         // Send null address to reset label to 'Send AUR'
         self.postMessage({address:address});
-        // If we're a text node we check if it contains a bitcoin address
+        // If we're a text node we check if it contains an auroracoin address
         if (node.children.length == 0 && node['textContent']) {
             var text = node['textContent'];
             var matches = text.match(/[13][1-9A-HJ-NP-Za-km-z]{26,33}/);
             if (matches) {
                 try {
                     new Bitcoin.Address(matches[0]);
-                    // If we get here we have a valid bitcoin address somewhere in the right clicked node
+                    // If we get here we have a valid auroracoin address somewhere in the right clicked node
                     address = matches[0];
                     // Sending the address back changes text to 'Pay <address>'
                     self.postMessage({address:address});
                     // Wrap address with a unique span so we can determine the exact position
-                    text = text.replace(address, '<span id="bitcoin-address-' + address + '">' + address + '</span>');
+                    text = text.replace(address, '<span id="auroracoin-address-' + address + '">' + address + '</span>');
                     var replacementNode = document.createElement('span');
                     replacementNode.innerHTML = text;
                     node.parentNode.insertBefore(replacementNode, node);
                     node.parentNode.removeChild(node);
                     // Get the rect of the address
-                    rect = document.getElementById('bitcoin-address-' + address).getBoundingClientRect();
+                    rect = document.getElementById('auroracoin-address-' + address).getBoundingClientRect();
                     // Put everything back to where it was
                     replacementNode.parentNode.insertBefore(node, replacementNode);
                     replacementNode.parentNode.removeChild(replacementNode);
