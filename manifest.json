@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Auroracoin Browser Wallet",
   "description": "Auroracoin wallet in the browser. Send and receive instantly on any web page.",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "author": "Andrew Toth, modified by Joseph Lee, SkateFish, and Auroracoin101",
   "action": {
     "default_popup": "data/index.html",
@@ -20,12 +20,12 @@
     "128": "data/auroracoin128.png"
   },
   "permissions": [
-    "storage",
-    "tabs"
+    "storage"
   ],
-  "host_permissions": [
-    "https://chainz.cryptoid.info/*"
-  ],
+
+  "background": {
+    "service_worker": "data/service_worker.js"
+  },
 
   "web_accessible_resources": [
     {
