@@ -8,55 +8,6 @@
  * Controls index.html, the main wallet Chrome popover/Firefox panel
  */
 
-function loadStyleSheet(href) {
-  const link = document.createElement('link');
-  link.rel = 'stylesheet';
-  link.href = href;
-  document.head.appendChild(link);
-}
-
-(async () => {
-  const themeToggleHandler = async () => {
-    try {
-      // Get the current theme
-      const currentTheme = await preferences.getTheme();
-      const newTheme = currentTheme === 'DARK' ? 'LIGHT' : 'DARK';
-
-      // Save the new theme preference
-      await preferences.setTheme(newTheme);
-
-      // Remove relevant theme-related stylesheet
-      const themeStylesheets = document.querySelectorAll('link[rel="stylesheet"]');
-      themeStylesheets.forEach(sheet => {
-        if (sheet.href.includes('index-dark.css') || sheet.href.includes('index-light.css')) {
-          sheet.parentNode.removeChild(sheet);
-        }
-      });
-
-      // Load the new theme's stylesheet
-      loadStyleSheet(newTheme === 'DARK' ? 'css/index-dark.css' : 'css/index-light.css');
-
-      console.log(`Theme switched to: ${newTheme}`);
-    } catch (err) {
-      console.error('Error toggling theme:', err);
-    }
-  };
-
-  try {
-    // Initial theme setup
-    const theme = await preferences.getTheme();
-    console.log('Theme preference:', theme);
-
-    loadStyleSheet(theme === 'DARK' ? 'css/index-dark.css' : 'css/index-light.css');
-  } catch (err) {
-      console.error('Error loading theme preference:', err);
-     // Fallback to a default theme
-      loadStyleSheet('css/index-light.css');
-  }
-
-  // Attach the event listener to the logo
-  document.getElementById('logo').addEventListener('click', themeToggleHandler);
-})();
 
 $(document).ready(function () {
   // Setup the wallet, page values and callbacks
@@ -98,6 +49,56 @@ $(document).ready(function () {
     } finally {
       setupWallet();
     }
+  })();
+
+  function loadStyleSheet(href) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = href;
+    document.head.appendChild(link);
+  }
+
+  (async () => {
+    const themeToggleHandler = async () => {
+      try {
+        // Get the current theme
+        const currentTheme = await preferences.getTheme();
+        const newTheme = currentTheme === 'DARK' ? 'LIGHT' : 'DARK';
+
+        // Save the new theme preference
+        await preferences.setTheme(newTheme);
+
+        // Remove relevant theme-related stylesheet
+        const themeStylesheets = document.querySelectorAll('link[rel="stylesheet"]');
+        themeStylesheets.forEach(sheet => {
+          if (sheet.href.includes('index-dark.css') || sheet.href.includes('index-light.css')) {
+            sheet.parentNode.removeChild(sheet);
+          }
+        });
+
+        // Load the new theme's stylesheet
+        loadStyleSheet(newTheme === 'DARK' ? 'css/index-dark.css' : 'css/index-light.css');
+
+        console.log(`Theme switched to: ${newTheme}`);
+      } catch (err) {
+        console.error('Error toggling theme:', err);
+      }
+    };
+
+    try {
+      // Initial theme setup
+      const theme = await preferences.getTheme();
+      console.log('Theme preference:', theme);
+
+      loadStyleSheet(theme === 'DARK' ? 'css/index-dark.css' : 'css/index-light.css');
+    } catch (err) {
+        console.error('Error loading theme preference:', err);
+       // Fallback to a default theme
+        loadStyleSheet('css/index-light.css');
+    }
+
+    // Attach the event listener to the logo
+    document.getElementById('logo').addEventListener('click', themeToggleHandler);
   })();
 
   $('#amount').on('keyup change', function () {
@@ -597,7 +598,8 @@ $(document).ready(function () {
     return false;
   });
 
-  function openTutorial() {
+
+    function openTutorial() {
     if (typeof chrome !== 'undefined') {
       chrome.tabs.create({
         url: 'https://auroracoin101.is/auroracoin-browser-wallet-tutorial/',
@@ -608,9 +610,7 @@ $(document).ready(function () {
     return false;
   }
 
-  /*
-   * Resizing
-   */
+  /*  Resizing */
 
   $('.modal')
     .on('shown.bs.modal', function () {

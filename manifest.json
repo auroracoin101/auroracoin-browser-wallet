@@ -1,33 +1,39 @@
 {
-    "manifest_version": 2,
-
-    "name": "Auroracoin Browser Wallet",
-    "author": "Andrew Toth, modifed by Joseph Lee, SkateFish, and Auroracoin101",
-    "description": "Auroracoin wallet in the browser. Send and receive instantly on any web page.",
-    "version": "2.2.0",
-
-    "icons": {
-        "16": "data/auroracoin16.png",
-        "24": "data/auroracoin24.png",
-        "48": "data/auroracoin48.png",
-        "128": "data/auroracoin128.png"
+  "manifest_version": 3,
+  "name": "Auroracoin Browser Wallet",
+  "description": "Auroracoin wallet in the browser. Send and receive instantly on any web page.",
+  "version": "3.0.1",
+  "author": "Andrew Toth, modified by Joseph Lee, SkateFish, and Auroracoin101",
+  "action": {
+    "default_popup": "data/index.html",
+    "default_icon": {
+      "16": "data/auroracoin16.png",
+      "24": "data/auroracoin24.png",
+      "32": "data/auroracoin32.png"
     },
+    "default_title": "Auroracoin Browser Wallet"
+  },
+  "icons": {
+    "16": "data/auroracoin16.png",
+    "24": "data/auroracoin24.png",
+    "48": "data/auroracoin48.png",
+    "128": "data/auroracoin128.png"
+  },
+  "permissions": [
+    "storage"
+  ],
 
-    "content_security_policy": "script-src 'self' ; object-src 'self';",
+  "background": {
+    "service_worker": "data/service_worker.js"
+  },
 
-"permissions": [ "storage"],
-
-    "web_accessible_resources": [
-        "data/*"
-    ],
-
-    "browser_action": {
-        "default_icon": {
-              "16": "data/auroracoin16.png",
-              "24": "data/auroracoin24.png",
-              "32": "data/auroracoin32.png"
-        },
-        "default_title": "Auroracoin Browser Wallet",
-        "default_popup": "data/index.html"
+  "web_accessible_resources": [
+    {
+      "resources": ["data/*"],
+      "matches": ["<all_urls>"]
     }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self';"
+  }
 }
