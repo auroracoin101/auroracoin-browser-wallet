@@ -8,3 +8,5 @@ manifest - Copy.json
 package - Copy.json
 .vscode/launch.json
 .backup
+archive
+doc
