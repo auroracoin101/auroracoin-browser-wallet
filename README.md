@@ -7,6 +7,8 @@ Auroracoin wallet in your browser.
 ### Extension Webstore(s) link
 [Chrome Webstore for Auroracoin Browser Wallet](https://chromewebstore.google.com/detail/auroracoin-browser-wallet/ibbbddhliiimfdpadncmdnbhgagplagk)
 
+<img width="454" height="504" alt="image" src="https://github.com/user-attachments/assets/3e6e8265-6765-432f-93b0-6e79789b40c1" />
+
 ## Releases
 | Version    | Description |
 |------------------ |------------ |
@@ -41,4 +43,5 @@ The private key will only leave the browser to be synced with other Chrome brows
 This is managed by the Browser Software.
 
 Encrypting the private key ensures that nobody will know the private key without the password, not even this extension.
+
 
