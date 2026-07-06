@@ -7,7 +7,7 @@ Auroracoin wallet in your browser.
 ### Extension Webstore(s) link
 [Chrome Webstore for Auroracoin Browser Wallet](https://chromewebstore.google.com/detail/auroracoin-browser-wallet/ibbbddhliiimfdpadncmdnbhgagplagk)
 
-<img width="454" height="504" alt="image" src="https://github.com/user-attachments/assets/3e6e8265-6765-432f-93b0-6e79789b40c1" />
+<img width="454" height="504" alt="image" src="./readme_extension_image.png" />
 
 ## Releases
 | Version    | Description |
