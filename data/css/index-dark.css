@@ -1,27 +1,7 @@
-:root {
-  /* Monochromatic Color Scheme */
-  --mono-darkest: #201713;
-  --mono-darker: #402e26;
-  --mono-dark: #604539;
-  --mono-medium: #815c4b;
-  --mono-primary: #a1735e;
-  --mono-secondary: #b48f7e;
-  --mono-accent: #c6ab9f;
-  --mono-light: #d9c7bf;
-  --mono-lightest: #ece3df;
 
-  
-  --mocha-dark: #133a29;
-  --mocha-green: #1fc189;
-  --mocha-blue: #1a4d63;
-  --mocha-primary: #b4926a;
-  --mocha-secondary: #dbbeab;
-  --mocha-accent: #d4c2b4;
-  --mocha-light: #f9f9f9;
-}
 
 a:hover {
-    color: var(--mocha-green);
+    color: #428bca;
     text-decoration: none !important;
 }
 
@@ -30,7 +10,7 @@ canvas,
 progress,
 video {
   opacity: 0.8;
-  border: 10px solid var(--mocha-light);
+  border: 10px solid white;
 }
 
 body .modal-dialog {
@@ -85,12 +65,12 @@ input[type="number"]::-webkit-outer-spin-button {
 
 #settingsButton {
     margin-left: 219px;
-    background: var(--mocha-dark);
+    background: #1b5952;
 }
 
 #settingsMenu {
     margin-left: 76px;
-    background-color: var(--mocha-blue);
+    background-color: #242f2f;
 }
 
 .no-padding {
@@ -98,33 +78,33 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .alert-danger {
-  color: var(--mocha-light);
-  background-color: var(--mocha-primary);
+  color: #ccc;
+  background-color: #a94442;
   opacity: 0.9;
 }
 
 .alert-danger .alert-link {
-  color: var(--mocha-secondary);
+  color: #d25350;
 }
 
 .alert-info {
-  border-color: var(--mocha-green);
-  color: var(--mocha-green);
-  background-color: var(--mocha-blue);
+  border-color: #a6d5ff;
+  color: #a6d5ff;
+  background-color: rgb(47, 91, 126);
   opacity: 0.9;
 }
 
 .alert-success {
-  color: var(--mocha-green);
-  background-color: var(--mocha-dark);
-  border-color: var(--mocha-green);
+  color: #a9faa9;
+  background-color: #134c14;
+  border-color: green;
   opacity: 0.9;
 }
 
 .alert-warning {
   color: #ffca79;
-  background-color: var(--mocha-primary);
-  border-color: var(--mocha-secondary);
+  background-color: #775300;
+  border-color: #f2b539;
   opacity: 0.9;
 }
 
@@ -135,13 +115,13 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .btn-danger {
   color: #ffdcdc;
-  border-color: var(--mocha-secondary);
+  border-color: #ff1d1d;
 }
 
 .btn-default {
-  color: var(--mocha-accent);
-  background-color: var(--mocha-blue);
-  border-color: var(--mocha-dark);
+  color: #ccc;
+  background-color: #292929;
+  border-color: #444;
 }
 
 .btn-default:hover,
@@ -150,15 +130,9 @@ input[type="number"]::-webkit-outer-spin-button {
 .btn-default:active,
 .btn-default.active,
 .open > .dropdown-toggle.btn-default {
-  color: var(--mocha-light);
-  background-color: var(--mocha-dark);
-  border-color: var(--mocha-green);
-}
-
-.btn-primary {
-  color: var(--mocha-dark);
-  background-color: var(--mocha-primary);
-  border-color: var(--mocha-secondary);
+  color: #ccc;
+  background-color: #444;
+  border-color: #ccc;
 }
 
 .btn-primary:hover,
@@ -167,9 +141,9 @@ input[type="number"]::-webkit-outer-spin-button {
 .btn-primary:active,
 .btn-primary.active,
 .open > .dropdown-toggle.btn-primary {
-  color: var(--mocha-dark);
-  background-color: var(--mocha-secondary);
-  border-color: var(--mocha-primary);
+  color: #fff;
+  background-color: var(--aurgreen);
+  border-color: transparent;
 }
 
 .btn-tools:hover,
@@ -178,39 +152,39 @@ input[type="number"]::-webkit-outer-spin-button {
 .btn-tools:active,
 .btn-tools.active,
 .open > .dropdown-toggle.btn-primary {
-  color: var(--mocha-dark);
-  background-color: var(--mocha-green);
-  border-color: var(--mocha-green);
+  color: #fff;
+  background-color: var(--aurgreen);
+  border-color: #7efc00;
 }
 
 .close {
-  color: var(--mocha-accent);
+  color: #ccc;
   opacity: 1;
 }
 
 .container {
-    background-color: var(--mocha-blue);
+    background-color: #000;
     margin-left: 0px;
     width: 360px;
 }
 
 .dropdown-menu {
-  background-color: var(--mocha-blue);
-  border: 1px solid var(--mocha-dark);
+  background-color: #101010;
+  border: 1px solid #444;
 }
 
 .dropdown-menu .divider {
-  background-color: var(--mocha-dark);
+  background-color: #3e3e3e;
 }
 
 .dropdown-menu > li > a {
-  color: var(--mocha-accent);
+  color: #acacac;
 }
 
 .dropdown-menu > li > a:hover,
 .dropdown-menu > li > a:focus {
-  color: var(--mocha-dark);
-  background-color: var(--mocha-primary);
+  color: white;
+  background-color: #215940;
   cursor: pointer;
 }
 
@@ -242,25 +216,25 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .form-control {
   font-size: 16px;
-  color: var(--mocha-accent);
-  background-color: var(--mocha-blue);
+  color: #ccc;
+  background-color: #1b1b1b;
   background-image: none;
-  border: 1px solid var(--mocha-primary);
+  border: 1px solid #929292;
 }
 
 .input-group-addon {
-  color: var(--mocha-accent);
-  background-color: var(--mocha-dark);
-  border: 1px solid var(--mocha-blue);
+  color: #ccc;
+  background-color: #222;
+  border: 1px solid #444;
 }
 
 .modal-content {
-  background-color: var(--mocha-blue);
-  color: var(--mocha-light);
+  background-color: #010101;
+  color: #ccc;
 }
 
 .modal-header {
-  border-bottom: 1px solid var(--mocha-primary);
+  border-bottom: 1px solid #339933;
 }
 
 
@@ -269,32 +243,35 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .panel-body {
-  background-color: var(--mocha-dark);
-  color: var(--mocha-accent);
+  background-color: #282727;
+  color: #9f9f9f;
 }
 
 .panel-footer {
-  background-color: var(--mocha-blue);
-  border-top: 1px solid var(--mocha-dark);
-  color: var(--mocha-accent);
+  background-color: #000;
+  border-top: 1px solid #444;
+  color: #ccc;
 }
 
 .panel-primary > .panel-heading {
-  background-color: var(--mocha-dark);
+  background-color: #063221;
 }  
 
 .table{
-  border-color: var(--mocha-green) !important;
+  border-color: #3c763d !important;
 }
 
 .table > tfoot > tr > td {
-  border-top: 1px solid var(--mocha-primary);
+  border-top: 1px solid #339933;
 }
 
 .table-bordered > tfoot > tr > td {
-  border: 1px dotted var(--mocha-secondary);
+  border: 1px dotted #339933;
 }
 
 .table-striped > tbody > tr:nth-child(odd) {
-  background-color: var(--mocha-blue);
+  background-color: #262525;
 }
+
+
+

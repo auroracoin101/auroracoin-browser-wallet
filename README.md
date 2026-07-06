@@ -30,6 +30,7 @@ Auroracoin wallet in your browser.
 |  2.2.0 | Added Dark Mode, Fixed Currency Exchange, increased txfee to 0.0003 for large transactions (miners) |
 |  3.0.0 | Upgraded to Google Manifest v3 |
 |  3.0.1 | Removed tab requirement, not needed |
+| 3.0.2 | Fixed Txxx Import issue |
 
 
 ## Security
