@@ -508,11 +508,11 @@ $(document).ready(function () {
     $('#importPrivateKeyPrivateKey').val(null);
     $('#importPrivateKeyModal').modal().show();
   });
-
+  
   $('#importPrivateKeyConfirm').click(function () {
     var privateKey = $('#importPrivateKeyPrivateKey').val();
     try {
-      new bitcoinjs_aur.ECPair.fromWIF(privateKey);
+      new bitcoinjs_aur.ECPair.fromWIF(privateKey, bitcoinjs_aur.networks.auroracoin);
     } catch (e) {
       $('#importPrivateKeyBadPrivateKey').slideDown();
       return;

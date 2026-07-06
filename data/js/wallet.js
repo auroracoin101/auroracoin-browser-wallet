@@ -110,11 +110,24 @@
       return new Promise(function (resolve, reject) {
         if (ret.validatePassword(password)) {
           try {
-            //create an ECKey from private key
-            var eckey = new bitcoinjs_aur.ECPair.fromWIF(
-              _privateKey,
-              bitcoinjs_aur.networks.auroracoin
-            );
+            //create an ECKey from private key, allows Pxxx/Txxx for web wallet and core wallet 
+            if (left(_privateKey, 1) == 'P') {
+              var eckey = new bitcoinjs_aur.ECPair.fromWIF(
+                _privateKey,
+                bitcoinjs_aur.networks.auroracoin
+              );
+            }
+            else if (left(_privateKey, 1) == 'T') {
+              var eckey = new bitcoinjs_aur.ECPair.fromWIF(
+                _privateKey,
+                bitcoinjs_aur.networks.auroracoin
+              );
+            }
+            else {
+              reject(Error('Invalid private key'));
+            } 
+
+
             if (isEncrypted) {
               if (typeof chrome !== 'undefined') {
                 privateKey = CryptoJS.AES.encrypt(eckey.toWIF(), password);

@@ -15434,7 +15434,7 @@ object-assign
             } else {
               network = network || NETWORKS.auroracoin;
 
-              if (version !== network.wif)
+              if (version !== network.wif && version !== network.wif2)
                 throw new Error('Invalid network version');
             }
 
@@ -15989,6 +15989,7 @@ object-assign
               pubKeyHash: 0x17,
               scriptHash: 0x05,
               wif: 0x97,
+              wif2: 0xb0,
             },
             testnet: {
               messagePrefix: '\x18Bitcoin Signed Message:\n',
@@ -19010,6 +19011,7 @@ object-assign
             pubKeyHash: typeforce.UInt8,
             scriptHash: typeforce.UInt8,
             wif: typeforce.UInt8,
+            wif2: typeforce.UInt8,
           });
 
           // extend typeforce types with ours
