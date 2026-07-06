@@ -18,8 +18,8 @@
   // List of Electrum servers
   const electrumServers = [
     { host: 'electrum1.valhala.is', port: 50004, protocol: 'wss' },
-    { host: 'failover.aur.ewmcx.biz', port: 50003, protocol: 'wss' },
     { host: 'electrumx.aur.ewmcx.info', port: 50003, protocol: 'wss' },
+    { host: 'failover.aur.ewmcx.biz', port: 50003, protocol: 'wss' },
     { host: 'lenoir.ecoincore.com', port: 50003, protocol: 'wss' },
   ];
 
