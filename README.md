@@ -7,7 +7,7 @@ Auroracoin wallet in your browser.
 ### Extension Webstore(s) link
 [Chrome Webstore for Auroracoin Browser Wallet](https://chromewebstore.google.com/detail/auroracoin-browser-wallet/ibbbddhliiimfdpadncmdnbhgagplagk)
 
-<img width="462" height="471" alt="image" src="https://github.com/user-attachments/assets/f3f14b44-10e9-4da3-908f-3e25558edd92" />
+<img width="454" height="504" alt="image" src="./readme_extension_image.png" />
 
 ## Releases
 | Version    | Description |
@@ -30,6 +30,7 @@ Auroracoin wallet in your browser.
 |  2.2.0 | Added Dark Mode, Fixed Currency Exchange, increased txfee to 0.0003 for large transactions (miners) |
 |  3.0.0 | Upgraded to Google Manifest v3 |
 |  3.0.1 | Removed tab requirement, not needed |
+| 3.0.2 | Fixed Txxx Import issue |
 
 
 ## Security
@@ -43,6 +44,5 @@ The private key will only leave the browser to be synced with other Chrome brows
 This is managed by the Browser Software.
 
 Encrypting the private key ensures that nobody will know the private key without the password, not even this extension.
-
 
 
