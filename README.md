@@ -1,5 +1,5 @@
 ![Auroracoin Official Logo.](/data/auroracoin128.png)
-# Auroracoin Browser Wallet Extension 3.0.1
+# Auroracoin Browser Wallet Extension 3.0.2
 
 ### Provided by Auroracoin101 Project Team
 Auroracoin wallet in your browser.  
