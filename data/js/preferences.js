@@ -104,7 +104,7 @@
           object[EXCHANGE_RATE] = 0;
           object[BTC_UNITS] = 'AUR';
           object[CURRENCY] = 'ISK';
-          object[THEME] = 'DARK';
+          object[THEME] = 1;
           chrome.storage.local.get(object, resolve);
         });
       } else {
@@ -120,7 +120,7 @@
               message[EXCHANGE_RATE] = 0;
               message[BTC_UNITS] = 'AUR';
               message[CURRENCY] = 'ISK';
-              message[THEME] = 'DARK';
+              message[THEME] = 1;
               return util.message('save', message);
             } else {
               return message;

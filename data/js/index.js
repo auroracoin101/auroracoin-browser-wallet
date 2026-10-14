@@ -77,34 +77,54 @@ $(document).ready(function () {
   })();
 
   function loadStyleSheet(href) {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = href;
-    document.head.appendChild(link);
+    return new Promise((resolve, reject) => {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = href;
+      link.onload = () => resolve(link);
+      link.onerror = () => {
+        if (link.parentNode) link.parentNode.removeChild(link);
+        reject(new Error('Stylesheet not found: ' + href));
+      };
+      document.head.appendChild(link);
+    });
+  }
+
+  // Normalize stored theme value to a number (handles migration from 'DARK'/'LIGHT')
+  function normalizeTheme(theme) {
+    if (typeof theme === 'number') return theme;
+    if (theme === 'LIGHT') return 2;
+    return 1;
+  }
+
+  // Remove any existing theme stylesheets (matching index-N.css pattern)
+  function removeThemeStylesheets() {
+    document.querySelectorAll('link[rel="stylesheet"]').forEach(sheet => {
+      if (/index-\d+\.css/.test(sheet.href)) {
+        sheet.parentNode.removeChild(sheet);
+      }
+    });
   }
 
   (async () => {
     const themeToggleHandler = async () => {
       try {
-        // Get the current theme
-        const currentTheme = await preferences.getTheme();
-        const newTheme = currentTheme === 'DARK' ? 'LIGHT' : 'DARK';
+        const currentTheme = normalizeTheme(await preferences.getTheme());
+        let nextTheme = currentTheme + 1;
 
-        // Save the new theme preference
-        await preferences.setTheme(newTheme);
+        removeThemeStylesheets();
 
-        // Remove relevant theme-related stylesheet
-        const themeStylesheets = document.querySelectorAll('link[rel="stylesheet"]');
-        themeStylesheets.forEach(sheet => {
-          if (sheet.href.includes('index-dark.css') || sheet.href.includes('index-light.css')) {
-            sheet.parentNode.removeChild(sheet);
-          }
-        });
-
-        // Load the new theme's stylesheet
-        loadStyleSheet(newTheme === 'DARK' ? 'css/index-dark.css' : 'css/index-light.css');
-
-        console.log(`Theme switched to: ${newTheme}`);
+        try {
+          await loadStyleSheet('css/index-' + nextTheme + '.css');
+          await preferences.setTheme(nextTheme);
+          console.log('Theme switched to: index-' + nextTheme);
+        } catch (err) {
+          // File not found, go back to 1
+          nextTheme = 1;
+          await loadStyleSheet('css/index-1.css');
+          await preferences.setTheme(1);
+          console.log('Theme not found, switched to: index-1');
+        }
       } catch (err) {
         console.error('Error toggling theme:', err);
       }
@@ -112,14 +132,17 @@ $(document).ready(function () {
 
     try {
       // Initial theme setup
-      const theme = await preferences.getTheme();
-      console.log('Theme preference:', theme);
-
-      loadStyleSheet(theme === 'DARK' ? 'css/index-dark.css' : 'css/index-light.css');
+      const theme = normalizeTheme(await preferences.getTheme());
+      try {
+        await loadStyleSheet('css/index-' + theme + '.css');
+      } catch (err) {
+        // Stored theme file doesn't exist, fall back to 1
+        await loadStyleSheet('css/index-1.css');
+        await preferences.setTheme(1);
+      }
     } catch (err) {
-        console.error('Error loading theme preference:', err);
-       // Fallback to a default theme
-        loadStyleSheet('css/index-light.css');
+      console.error('Error loading theme preference:', err);
+      loadStyleSheet('css/index-1.css');
     }
 
     // Attach the event listener to the logo
