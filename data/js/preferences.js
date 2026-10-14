@@ -18,24 +18,95 @@
     BTC_UNITS = 'wallet.btc_units',
     CURRENCY = 'wallet.currency',
     SITE = 'https://chainz.cryptoid.info/aur/api.dws?q=addressinfo&a=%address%',
-    THEME = 'wallet.theme'
+    THEME = 'wallet.theme',
+    MIGRATED = 'wallet.migrated_to_local',
     preferences = function () {};
+
+  // All wallet data keys, used for the sync-to-local migration
+  var WALLET_KEYS = [
+    ADDRESS,
+    PRIVATE_KEY,
+    SCRIPTHASH,
+    IS_ENCRYPTED,
+    LAST_BALANCE,
+    EXCHANGE_RATE,
+    BTC_UNITS,
+    CURRENCY,
+    THEME,
+  ];
+
+  // One-time migration: copy wallet data from chrome.storage.sync to
+  // chrome.storage.local, then remove it from sync. The sync data is
+  // only deleted after the local write has succeeded, so the wallet
+  // is never left without its data if the local write fails.
+  function migrateSyncToLocal() {
+    return new Promise(function (resolve) {
+      // Skip if we have already migrated
+      chrome.storage.local.get(MIGRATED, function (localValues) {
+        if (localValues && localValues[MIGRATED]) {
+          return resolve();
+        }
+        // Read everything currently in sync storage
+        chrome.storage.sync.get(null, function (syncValues) {
+          if (chrome.runtime.lastError || !syncValues) {
+            // Cannot read sync, retry on next load
+            return resolve();
+          }
+          var hasWalletData =
+            syncValues[PRIVATE_KEY] || syncValues[ADDRESS];
+          var migrationFlag = {};
+          migrationFlag[MIGRATED] = true;
+          if (!hasWalletData) {
+            // Nothing to migrate, just mark as done
+            chrome.storage.local.set(migrationFlag, function () {
+              resolve();
+            });
+            return;
+          }
+          // Copy only the known wallet keys
+          var copy = {};
+          WALLET_KEYS.forEach(function (key) {
+            if (typeof syncValues[key] !== 'undefined') {
+              copy[key] = syncValues[key];
+            }
+          });
+          chrome.storage.local.set(copy, function () {
+            if (chrome.runtime.lastError) {
+              // Local write failed: keep sync data, retry on next load
+              return resolve();
+            }
+            // Local write succeeded, safe to remove from sync
+            chrome.storage.sync.remove(WALLET_KEYS, function () {
+              chrome.storage.local.set(migrationFlag, function () {
+                console.log(
+                  'Wallet data migrated from sync to local storage.'
+                );
+                resolve();
+              });
+            });
+          });
+        });
+      });
+    });
+  }
 
   function sync() {
     return new Promise(function (resolve) {
       // Different APIs for Chrome and Firefox
       if (typeof chrome !== 'undefined') {
-        var object = {};
-        object[ADDRESS] = '';
-        object[PRIVATE_KEY] = '';
-        object[SCRIPTHASH] = '';
-        object[IS_ENCRYPTED] = false;
-        object[LAST_BALANCE] = 0;
-        object[EXCHANGE_RATE] = 0;
-        object[BTC_UNITS] = 'AUR';
-        object[CURRENCY] = 'ISK';
-        object[THEME] = 1;
-        chrome.storage.sync.get(object, resolve);
+        migrateSyncToLocal().then(function () {
+          var object = {};
+          object[ADDRESS] = '';
+          object[PRIVATE_KEY] = '';
+          object[SCRIPTHASH] = '';
+          object[IS_ENCRYPTED] = false;
+          object[LAST_BALANCE] = 0;
+          object[EXCHANGE_RATE] = 0;
+          object[BTC_UNITS] = 'AUR';
+          object[CURRENCY] = 'ISK';
+          object[THEME] = 'DARK';
+          chrome.storage.local.get(object, resolve);
+        });
       } else {
         util
           .message('get')
@@ -76,7 +147,7 @@
       object[key] = value;
       // Different APIs for Chrome and Firefox
       if (typeof chrome !== 'undefined') {
-        chrome.storage.sync.set(object, resolve);
+        chrome.storage.local.set(object, resolve);
       } else {
         util.message('save', object).then(resolve);
       }
