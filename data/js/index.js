@@ -39,6 +39,29 @@ $(document).ready(function () {
     setBalance(balance);
   });
 
+  wallet.setStatusListener(function (err) {
+    if (err) {
+      $('#connectionAlertLabel').text(
+        "Can't reach the Auroracoin servers, so your balance may be out of date. " +
+          ((err && err.message) || '')
+      );
+      $('#connectionAlert').slideDown();
+    } else {
+      $('#connectionAlert').slideUp();
+    }
+  });
+
+  $('#connectionRetry').click(function () {
+    $('#connectionAlert').slideUp();
+    electrumxManager.electrumInit().then(
+      function () { wallet.updateBal(); },
+      function (err) {
+        $('#connectionAlertLabel').text(err.message);
+        $('#connectionAlert').slideDown();
+      }
+    );
+  });
+
   // IIFE top-level await - ensures electrumInit resolves before setupWallet
   (async () => {
     try {
@@ -46,6 +69,8 @@ $(document).ready(function () {
     } catch (err) {
       console.error('electrumInit');
       console.error(err);
+      $('#connectionAlertLabel').text(err.message);
+      $('#connectionAlert').show();
     } finally {
       setupWallet();
     }
@@ -534,6 +559,92 @@ $(document).ready(function () {
         }
       }
     );
+  });
+
+  /*
+   *  Sweep Private Key (does not replace this wallet's key)
+   */
+  function sweepReset() {
+    $('#sweepError').hide().text('');
+    $('#sweepSummary').hide().text('');
+    $('#sweepConfirm').hide().prop('disabled', false);
+    $('#sweepCheck').prop('disabled', false);
+  }
+
+  function sweepFail(e) {
+    $('#sweepSummary').hide().text('');
+    $('#sweepError').text((e && e.message) || String(e)).slideDown();
+    $('#sweepCheck').prop('disabled', false);
+    $('#sweepConfirm').prop('disabled', false);
+    $('#cover').hide();
+  }
+
+  $('#sweepPrivateKey').click(function () {
+    $('#sweepKey').val('');
+    $('#sweepPassword').val('');
+    $('#sweepPasswordGroup').hide();
+    wallet.clearSweepCache();
+    sweepReset();
+    $('#sweepModal').modal().show();
+  });
+
+  $('#sweepKey').on('input', function () {
+    sweepReset();
+    if (wallet.isPasswordProtectedKey($('#sweepKey').val())) {
+      $('#sweepPasswordGroup').slideDown();
+    } else {
+      $('#sweepPasswordGroup').hide();
+    }
+  });
+  $('#sweepPassword').on('input', sweepReset);
+
+  $('#sweepCheck').click(function () {
+    sweepReset();
+    $('#sweepCheck').prop('disabled', true);
+    var isProtected = wallet.isPasswordProtectedKey($('#sweepKey').val());
+    $('#sweepSummary')
+      .text(isProtected ? 'Unlocking the key\u2026 this takes a few seconds.' : 'Looking up the key\u2019s balance\u2026')
+      .show();
+    var onProgress = function (p) {
+      $('#sweepSummary').text('Unlocking the key\u2026 ' + Math.round(p * 100) + '%');
+    };
+    wallet.sweepPreview($('#sweepKey').val(), $('#sweepPassword').val(), onProgress).then(function (p) {
+      $('#sweepCheck').prop('disabled', false);
+      if (p.count === 0) {
+        $('#sweepSummary').text('No coins found on ' + p.from + '. If you expected some, check the address on a block explorer.');
+        return;
+      }
+      if (p.net <= 546) {
+        $('#sweepSummary').text('Found ' + p.total / 1e8 + ' AUR on ' + p.from + ', which is not enough to cover the ' + p.fee / 1e8 + ' AUR network fee.');
+        return;
+      }
+      var msg = 'Found ' + p.total / 1e8 + ' AUR on ' + p.from + ' (' + p.count + ' payment' + (p.count === 1 ? '' : 's') + '). ' +
+        'Sweeping sends ' + p.net / 1e8 + ' AUR to this wallet after a ' + p.fee / 1e8 + ' AUR network fee.';
+      if (p.remaining > 0) msg += ' This key has ' + p.remaining + ' more payments; run the sweep again afterwards to collect them.';
+      $('#sweepSummary').text(msg).show();
+      $('#sweepConfirm').show();
+    }, sweepFail);
+  });
+
+  $('#sweepConfirm').click(function () {
+    $('#sweepConfirm').prop('disabled', true);
+    $('#sweepCheck').prop('disabled', true);
+    $('#cover').show();
+    wallet.sweep($('#sweepKey').val(), $('#sweepPassword').val()).then(function (r) {
+      $('#cover').fadeOut('slow');
+      $('#sweepKey').val('');
+      $('#sweepPassword').val('');
+      $('#sweepModal').modal('hide');
+      var link = $('<a target="_blank"></a>')
+        .attr('href', 'https://chainz.cryptoid.info/aur/tx.dws?' + r.txid + '.htm')
+        .text(r.txid);
+      $('#successAlertLabel')
+        .empty()
+        .append($('<b></b>').text('Swept ' + r.net / 1e8 + ' AUR into this wallet. '))
+        .append($('<span style="overflow-wrap:anywhere"></span>').append('Transaction: ', link))
+        .append(r.remaining > 0 ? $('<p></p>').text(r.remaining + ' payments left on that key. Sweep again to collect them.') : '');
+      $('#successAlert').slideDown();
+    }, sweepFail);
   });
 
   /*
