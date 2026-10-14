@@ -34,6 +34,13 @@ Auroracoin wallet in your browser.
 | 3.0.3 | Sweep paper wallets (BIP38), wallet storage moved to local-only, dynamic fees, connection resilience *(in testing)* |
 
 
+## Contributors
+
+- **Matthew ([@Mattakazulu7](https://github.com/Mattakazulu7))** — BIP38 sweep feature: key unlocking approach
+  and early implementation ([his repository](https://github.com/Mattakazulu7/auroracoin-wallet))
+
+Thank you! Contributions are welcome — see [Auroracoin Git Primer 101.md](Auroracoin%20Git%20Primer%20101.md) for how to get started.
+
 ## Security
 
 The private key is stored securely in your local browser storage and you may choose to encrypt it,
