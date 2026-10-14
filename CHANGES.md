@@ -4,6 +4,9 @@ All notable changes to the Auroracoin Browser Wallet are documented here.
 
 ## 3.0.3 (in testing)
 
+### Contributors
+- BIP38 sweep: key unlocking approach and early implementation by Matthew ([@Mattakazulu7](https://github.com/Mattakazulu7))
+
 ### Added
 - **Sweep Private Key** — move funds held by another private key into this wallet without replacing the wallet's own key. Accepts:
   - BIP38 password-protected paper wallet keys (`6P...`), both direct (`0x0142`) and EC-multiply (`0x0143`) modes
