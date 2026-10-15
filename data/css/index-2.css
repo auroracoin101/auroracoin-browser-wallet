@@ -75,8 +75,6 @@ input[type="number"]::-webkit-outer-spin-button {
     margin: 0px;
 }
 
-   }
-
 .btn.active.focus {
   outline: reset;
   outline-offset: -1px;
