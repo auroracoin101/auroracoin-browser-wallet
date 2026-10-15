@@ -19,6 +19,10 @@ All notable changes to the Auroracoin Browser Wallet are documented here.
 - Balance display now includes unconfirmed coins, so freshly received or swept funds appear immediately
 - Electrum connection handling reworked: per-server connect timeouts, one shared connection, and automatic reconnect + retry so a dropped socket no longer hangs the wallet
 - Tries both compressed and uncompressed forms of a swept key and uses whichever holds coins
+- **Theme switching now fades out and back in** instead of snapping between themes
+
+### Removed
+- **"Import Private Key" menu option and modal** — superseded by Sweep Private Key. Import replaced the wallet's own key (discarding its balance); sweeping moves the coins into the current wallet safely, so the sweep modal now also explains the accepted key formats
 
 ### Fixed
 - Low-fee sends no longer rejected for transactions with many inputs (see dynamic fees above)

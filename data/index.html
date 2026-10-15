@@ -5,6 +5,11 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
    <link href="css/bootstrap.css" rel="stylesheet">
    <!-- see index.js for dynamic load link href="css/index.css" rel="stylesheet"-->
+   <style>
+      /* Theme switching: fade the page out while stylesheets are swapped */
+      body { transition: opacity 180ms ease; }
+      body.theme-fading { opacity: 0; }
+   </style>
    <script src="js/libs/promise.min.js" type="text/javascript"></script>
    <script src="js/libs/cryptojs.min.js" type="text/javascript"></script>
    <script src="js/libs/bitcoinjs-aur.js" type="text/javascript"></script>
@@ -40,7 +45,6 @@
                   <li class="divider">
                   <li><a id="showPrivateKey">Show Private Key</a></li>
                   <li><a id="sweepPrivateKey">Sweep Private Key</a></li>
-                  <li><a id="importPrivateKey">Import Private Key</a></li>
                   <li><a id="generateNewWallet">Generate New Wallet</a></li>
                   <li class="divider">
 
@@ -254,6 +258,16 @@
             </div>
             <div class="modal-body">
                 <p>Moves every coin held by another private key into this wallet. Your own key stays as it is.</p>
+                <p class="help-block" style="font-size: 12px;">
+                    Accepted formats: BIP38 password-protected paper wallet keys (6P&hellip;),
+                    WIF private keys (used by this and other Auroracoin wallets), and raw
+                    64-character hex secrets.
+                    <br>
+                    Sweeping is safer than making another key your wallet's own key &mdash; your
+                    current balance and address stay untouched, and the coins simply arrive
+                    as an incoming transaction. This replaces the old &ldquo;Import Private
+                    Key&rdquo; option.
+                </p>
                 <div id="sweepError" class="alert alert-danger" style="display: none;"></div>
                 <div class="form-group">
                     <input type="password" class="form-control" id="sweepKey" placeholder="Private key to sweep" autocomplete="off">
@@ -266,37 +280,6 @@
                 <p>
                     <button id="sweepCheck" type="button" class="btn btn-default">Check balance</button>
                     <button id="sweepConfirm" type="button" class="btn btn-primary" style="display: none;">Sweep into this wallet</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                </p>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
-<!-- Import Private Key -->
-<div class="modal fade" id="importPrivateKeyModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Import Private Key</h4>
-            </div>
-            <div class="modal-body">
-                <div class="alert alert-warning">
-                    <strong>Warning!</strong> All balance on current wallet will be lost.
-                </div>
-                <div id="importPrivateKeyPasswordIncorrect" class="alert alert-danger">
-                    Your password is incorrect.
-                </div>
-                <div id="importPrivateKeyBadPrivateKey" class="alert alert-danger">
-                    The private key is invalid.
-                </div>
-                <div class="form-group">
-                    <input type="password" class="form-control" id="importPrivateKeyPassword" placeholder="Password">
-                    <input type="text" class="form-control" id="importPrivateKeyPrivateKey" placeholder="Private Key">
-                </div>
-                <p>
-                    <button id="importPrivateKeyConfirm" type="button" class="btn btn-primary">Import Private Key</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </p>
             </div>

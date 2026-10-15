@@ -106,27 +106,62 @@ $(document).ready(function () {
     });
   }
 
+  // Smooth theme switch: fade the page out, swap the stylesheet, fade back in.
+  // The .theme-fading CSS lives in index.html so it survives stylesheet swaps.
+  const THEME_FADE_MS = 180;
+
+  function fadeSwapStylesheets(swap) {
+    return new Promise((resolve) => {
+      const body = document.body;
+      body.classList.add('theme-fading');
+      let done = false;
+      const finish = async () => {
+        if (done) return;
+        done = true;
+        document.body.removeEventListener('transitionend', finish);
+        try {
+          await swap();
+        } catch (err) {
+          console.error('Error swapping theme:', err);
+        }
+        // Give the new stylesheet a frame to apply, then fade back in
+        requestAnimationFrame(() => body.classList.remove('theme-fading'));
+        resolve();
+      };
+      body.addEventListener('transitionend', finish);
+      setTimeout(finish, THEME_FADE_MS + 60); // safety net if no transitionend fires
+    });
+  }
+
   (async () => {
+    let themeSwitching = false;
+
     const themeToggleHandler = async () => {
+      if (themeSwitching) return; // ignore clicks while a switch is in flight
+      themeSwitching = true;
       try {
         const currentTheme = normalizeTheme(await preferences.getTheme());
         let nextTheme = currentTheme + 1;
 
-        removeThemeStylesheets();
+        await fadeSwapStylesheets(async () => {
+          removeThemeStylesheets();
 
-        try {
-          await loadStyleSheet('css/index-' + nextTheme + '.css');
-          await preferences.setTheme(nextTheme);
-          console.log('Theme switched to: index-' + nextTheme);
-        } catch (err) {
-          // File not found, go back to 1
-          nextTheme = 1;
-          await loadStyleSheet('css/index-1.css');
-          await preferences.setTheme(1);
-          console.log('Theme not found, switched to: index-1');
-        }
+          try {
+            await loadStyleSheet('css/index-' + nextTheme + '.css');
+            await preferences.setTheme(nextTheme);
+            console.log('Theme switched to: index-' + nextTheme);
+          } catch (err) {
+            // File not found, go back to 1
+            nextTheme = 1;
+            await loadStyleSheet('css/index-1.css');
+            await preferences.setTheme(1);
+            console.log('Theme not found, switched to: index-1');
+          }
+        });
       } catch (err) {
         console.error('Error toggling theme:', err);
+      } finally {
+        themeSwitching = false;
       }
     };
 
@@ -544,45 +579,10 @@ $(document).ready(function () {
 
   /*
    *  Import Private Key
+   *  Removed: superseded by Sweep Private Key, which moves the coins
+   *  into the current wallet without replacing it (and without the
+   *  "all balance will be lost" danger the import option carried).
    */
-  $('#importPrivateKey').click(function () {
-    $('#importPrivateKeyPasswordIncorrect').hide();
-    $('#importPrivateKeyBadPrivateKey').hide();
-    if (wallet.isEncrypted()) {
-      $('#importPrivateKeyPassword').val(null).show();
-    } else {
-      $('#importPrivateKeyPassword').hide();
-    }
-    $('#importPrivateKeyPrivateKey').val(null);
-    $('#importPrivateKeyModal').modal().show();
-  });
-
-  $('#importPrivateKeyConfirm').click(function () {
-    var privateKey = $('#importPrivateKeyPrivateKey').val();
-    try {
-      new bitcoinjs_aur.ECPair.fromWIF(privateKey);
-    } catch (e) {
-      $('#importPrivateKeyBadPrivateKey').slideDown();
-      return;
-    }
-    wallet.importAddress($('#importPrivateKeyPassword').val(), privateKey).then(
-      function () {
-        setupWallet();
-        $('#successAlertLabel').text('Private key imported successfully.');
-        $('#successAlert').show();
-        $('#importPrivateKeyModal').modal('hide');
-      },
-      function (e) {
-        if (e.message === 'Incorrect password') {
-          $('#importPrivateKeyBadPrivateKey').slideUp();
-          $('#importPrivateKeyPasswordIncorrect').slideDown();
-        } else {
-          $('#importPrivateKeyPasswordIncorrect').slideUp();
-          $('#importPrivateKeyBadPrivateKey').slideDown();
-        }
-      }
-    );
-  });
 
   /*
    *  Sweep Private Key (does not replace this wallet's key)

@@ -135,52 +135,6 @@
       });
     },
 
-    // Import an address using a private key
-    importAddress: function (password, _privateKey) {
-      return new Promise(function (resolve, reject) {
-        if (ret.validatePassword(password)) {
-          try {
-            //create an ECKey from private key
-            var eckey = new bitcoinjs_aur.ECPair.fromWIF(
-              _privateKey,
-              bitcoinjs_aur.networks.auroracoin
-            );
-            if (isEncrypted) {
-              if (typeof chrome !== 'undefined') {
-                privateKey = CryptoJS.AES.encrypt(eckey.toWIF(), password);
-              } else {
-                privateKey = JSON.parse(
-                  CryptoJS.AES.encrypt(eckey.toWIF(), password, {
-                    format: jsonFormatter,
-                  })
-                );
-              }
-            } else {
-              privateKey = eckey.toWIF();
-            }
-            address = eckey.getAddress();
-            var outputscript = bitcoinjs_aur.address.toOutputScript(address);
-            var sha = bitcoinjs_aur.crypto.sha256(outputscript);
-            scripthash = bitcoinjs_aur.Buffer.from(sha.reverse()).toString('hex');
-            balance = 0;
-            Promise.all([
-              preferences.setAddress(address),
-              preferences.setPrivateKey(privateKey),
-              preferences.setLastBalance(0),
-              preferences.setScriptHash(scripthash),
-            ]).then(function () {
-              updateBalance();
-              resolve();
-            });
-          } catch (e) {
-            reject(Error('Invalid private key'));
-          }
-        } else {
-          reject(Error('Incorrect password'));
-        }
-      });
-    },
-
     // Check if the password is valid
     validatePassword: function (password) {
       if (isEncrypted) {
